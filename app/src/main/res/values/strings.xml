@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">ComicGround</string>
+    <string name="search">Buscar...</string>
+    <string name="iuser">Usuario</string>
+    <string name="ipass">Contraseña</string>
+    <string name="register">Registrarse</string>
+    <string name="login">Iniciar sesión</string>
+
+    <!--Quizá no sean necesarios -->
+    <string name="profile">Perfil</string>
+    <string name="settings">Configuración</string>
+    <string name="exit">Salir</string>
+</resources>

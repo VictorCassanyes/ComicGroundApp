@@ -1,0 +1,45 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.ComicGround" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryVariant">@color/primaryLightColor</item>
+        <item name="colorOnPrimary">@color/primaryDarkColor</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryLightColor</item>
+        <item name="colorOnSecondary">@color/secondaryDarkColor</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="android:background">@color/secondaryLightColor</item>
+    </style>
+
+    <style name="editText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">18dp</item>
+        <item name="boxCornerRadiusTopEnd">18dp</item>
+        <item name="boxCornerRadiusBottomStart">18dp</item>
+        <item name="boxCornerRadiusBottomEnd">18dp</item>
+        <item name="boxBackgroundMode">outline</item>
+    </style>
+
+    <style name="buttonColored" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:backgroundTint">@color/primaryColor</item>
+        <item name="android:textColor">@color/secondaryLightColor</item>
+    </style>
+
+    <style name="buttonBorderless" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/primaryColor</item>
+    </style>
+
+    <style name="appName" parent="Theme.ComicGround">
+        <item name="android:textColor">@color/primaryColor</item>
+        <item name="android:fontFamily">casual</item>
+        <item name="android:textSize">50sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="line" parent="Theme.ComicGround">
+        <item name="android:background">@color/secondaryColor</item>
+    </style>
+</resources>
