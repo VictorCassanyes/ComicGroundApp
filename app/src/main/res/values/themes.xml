@@ -12,7 +12,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="android:background">@color/secondaryLightColor</item>
     </style>
 
     <style name="editText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -26,7 +25,6 @@
 
     <style name="buttonColored" parent="Widget.AppCompat.Button.Colored">
         <item name="android:backgroundTint">@color/primaryColor</item>
-        <item name="android:textColor">@color/secondaryLightColor</item>
     </style>
 
     <style name="buttonBorderless" parent="Widget.AppCompat.Button.Borderless">
