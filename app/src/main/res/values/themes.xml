@@ -21,6 +21,7 @@
         <item name="boxCornerRadiusBottomStart">18dp</item>
         <item name="boxCornerRadiusBottomEnd">18dp</item>
         <item name="boxBackgroundMode">outline</item>
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
     <style name="buttonColored" parent="Widget.AppCompat.Button.Colored">

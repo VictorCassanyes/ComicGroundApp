@@ -9,10 +9,10 @@ import android.os.Bundle;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
-
+    ConstraintLayout constraintLayout;
     AppCompatButton btnLogin;
     AppCompatButton btnSignin;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,5 +36,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(goSignin);
             }
         });
+
+        constraintLayout = (ConstraintLayout) findViewById(R.id.main_layout);
+        constraintLayout.setOnClickListener(null);
     }
 }
