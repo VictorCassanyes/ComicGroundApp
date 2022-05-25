@@ -10,7 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ComicGround">
         <activity
-            android:name=".ActivitySignin"
+            android:name=".ActivityComic"
+            android:exported="false" />
+        <activity
+            android:name=".ActivitySignup"
             android:exported="false" />
         <activity
             android:name=".ActivitySearch"

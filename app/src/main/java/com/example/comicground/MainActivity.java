@@ -28,12 +28,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnSignin= findViewById(R.id.btnsignin);
+        btnSignin= findViewById(R.id.btnsignup);
         btnSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent goSignin=new Intent(MainActivity.this, ActivitySignin.class);
-                startActivity(goSignin);
+                Intent goSignup=new Intent(MainActivity.this, ActivitySignup.class);
+                startActivity(goSignup);
             }
         });
 

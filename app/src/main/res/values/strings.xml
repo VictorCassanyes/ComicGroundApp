@@ -1,10 +1,14 @@
 <resources>
     <string name="app_name">ComicGround</string>
     <string name="search">Buscar...</string>
-    <string name="iuser">Usuario</string>
-    <string name="ipass">Contraseña</string>
-    <string name="register">Registrarse</string>
+    <string name="user">Apodo</string>
+    <string name="pass">Contraseña</string>
+    <string name="signup">Registrarse</string>
     <string name="login">Iniciar sesión</string>
+    <string name="firstname">Nombre</string>
+    <string name="lastname">Apellidos</string>
+    <string name="email">Correo electrónico</string>
+    <string name="emailc">Confirmar correo electrónico</string>
 
     <!--Quizá no sean necesarios -->
     <string name="profile">Perfil</string>
