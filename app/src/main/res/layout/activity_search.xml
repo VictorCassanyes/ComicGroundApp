@@ -29,7 +29,6 @@
         app:layout_constraintTop_toBottomOf="@+id/tvname" />
 
     <EditText
-        android:drawableStart="@drawable/search"
         android:id="@+id/etsearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,7 +37,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/line" />
 
+    <ImageButton
+        android:id="@+id/btnsearch"
+        style="@style/Theme.ComicGround"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/search"
+        app:layout_constraintTop_toBottomOf="@+id/etsearch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="40dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <ImageView
+        android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_track_changes_24"
