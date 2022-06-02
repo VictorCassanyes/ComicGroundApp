@@ -1,0 +1,2 @@
+# ComicGroundApp
+App móvil ComicGround
