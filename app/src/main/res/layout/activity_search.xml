@@ -6,103 +6,125 @@
     android:layout_height="match_parent"
     tools:context=".ActivitySearch">
 
-    <TextView
-        android:id="@+id/tvname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="34dp"
-        android:text="@string/app_name"
-        style="@style/appName"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/line"
-        android:layout_width="match_parent"
-        android:layout_height="4px"
-        style="@style/line"
-        android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/etsearch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvname" />
-
-    <EditText
-        android:id="@+id/etsearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/line" />
-
-    <ImageButton
-        android:id="@+id/btnsearch"
-        style="@style/Theme.ComicGround"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/search"
-        app:layout_constraintTop_toBottomOf="@+id/etsearch"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <TextView
-        android:id="@+id/tv"
-        android:layout_width="match_parent"
-        android:layout_marginHorizontal="40dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/logo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_track_changes_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/menufloat"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="21dp"
-        android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:fab_expandDirection="up"
-        app:fab_addButtonPlusIconColor="@color/primaryDarkColor"
-        app:fab_addButtonColorNormal="@color/primaryColor"
-        app:fab_addButtonColorPressed="@color/primaryLightColor">
+        android:fillViewport="true">
 
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnprofile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_icon="@drawable/profile"
-            app:fab_colorNormal="@color/primaryColor"
-            app:fab_colorPressed="@color/primaryLightColor"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnsettings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_icon="@drawable/settings"
-            app:fab_colorNormal="@color/primaryColor"
-            app:fab_colorPressed="@color/primaryLightColor"/>
+            <TextView
+                android:id="@+id/tvNombreApp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="34dp"
+                android:text="@string/app_name"
+                style="@style/appName"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/line"/>
 
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnexit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_icon="@drawable/exit"
-            app:fab_colorNormal="@color/primaryColor"
-            app:fab_colorPressed="@color/primaryLightColor"/>
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+            <TextView
+                android:id="@+id/line"
+                android:layout_width="match_parent"
+                android:layout_height="4px"
+                style="@style/line"
+                android:layout_marginTop="20dp"
+                app:layout_constraintBottom_toTopOf="@+id/etBuscar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvNombreApp" />
+
+            <EditText
+                android:id="@+id/etBuscar"
+                android:layout_marginEnd="45dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/search"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                app:layout_constraintTop_toBottomOf="@+id/line" />
+
+            <ImageButton
+                android:id="@+id/btnBuscar"
+                style="@style/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/search"
+                app:layout_constraintTop_toBottomOf="@+id/line"
+                app:layout_constraintStart_toEndOf="@+id/etBuscar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/etBuscar"/>
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/etBuscar"
+                app:layout_constraintBottom_toTopOf="@+id/logo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:orientation="vertical">
+
+                <fragment
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </fragment>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_track_changes_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.getbase.floatingactionbutton.FloatingActionsMenu
+                android:id="@+id/menufloat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="21dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:fab_expandDirection="up"
+                app:fab_addButtonPlusIconColor="@color/primaryDarkColor"
+                app:fab_addButtonColorNormal="@color/primaryColor"
+                app:fab_addButtonColorPressed="@color/primaryLightColor">
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnPerfil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fab_icon="@drawable/profile"
+                    app:fab_colorNormal="@color/primaryColor"
+                    app:fab_colorPressed="@color/primaryLightColor"/>
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnConfiguracion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fab_icon="@drawable/settings"
+                    app:fab_colorNormal="@color/primaryColor"
+                    app:fab_colorPressed="@color/primaryLightColor"/>
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnSalir"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fab_icon="@drawable/exit"
+                    app:fab_colorNormal="@color/primaryColor"
+                    app:fab_colorPressed="@color/primaryLightColor"/>
+            </com.getbase.floatingactionbutton.FloatingActionsMenu>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

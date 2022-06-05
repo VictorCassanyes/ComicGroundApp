@@ -11,7 +11,6 @@
         <item name="colorOnSecondary">@color/secondaryDarkColor</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
     </style>
 
     <style name="editText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -29,6 +28,10 @@
 
     <style name="buttonBorderless" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@color/primaryColor</item>
+    </style>
+
+    <style name="imageView">
+        <item name="android:background">@color/white</item>
     </style>
 
     <style name="appName" parent="Theme.ComicGround">

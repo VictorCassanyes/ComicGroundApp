@@ -20,8 +20,9 @@ import java.net.URL;
 
 public class ActivitySearch extends AppCompatActivity {
 
-    TextView tv;
-    EditText etsearch;
+    TextView tvNombreApp;
+    EditText etBuscar;
+    ImageButton btnBuscar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +30,10 @@ public class ActivitySearch extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         getSupportActionBar().hide();
 
-        tv=findViewById(R.id.tv);
-        etsearch=findViewById(R.id.etsearch);
-
-        ImageButton btnsearch= findViewById(R.id.btnsearch);
-        btnsearch.setOnClickListener(new View.OnClickListener() {
+        tvNombreApp=findViewById(R.id.tvNombreApp);
+        etBuscar=findViewById(R.id.etBuscar);
+        btnBuscar=findViewById(R.id.btnBuscar);
+        btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ConnectivityManager connectivityManager= (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -41,7 +41,7 @@ public class ActivitySearch extends AppCompatActivity {
                 if (networkInfo.isConnected() && networkInfo.isAvailable()) {
                     new HttpAsyncTask().execute();
                 } else {
-                    Toast.makeText(getApplicationContext(), "No hay conexión a internet (o no disponible)", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "No hay conexión a internet o no está disponible", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -55,7 +55,7 @@ public class ActivitySearch extends AppCompatActivity {
             HttpURLConnection miHttp=null;
             try {
                 //La IP de mi máquina en red no "localhost" ni 127.0.0.1
-                String url = "http://192.168.0.11:8080/ComicGround/comics/"+etsearch.getText().toString();
+                String url = "http://192.168.0.11:8080/comicground"+etBuscar.getText().toString();
                 URL obj = new URL(url);
                 HttpURLConnection conn = (HttpURLConnection) obj.openConnection();
                 conn.setReadTimeout(5000);
@@ -114,7 +114,7 @@ public class ActivitySearch extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            tv.setText(result);
+            tvNombreApp.setText(result);
         }
 
     }
