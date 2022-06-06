@@ -1,5 +1,7 @@
 package com.example.comicground.api.seguridad;
 
+import static com.example.comicground.api.ClienteAPI.retrofit;
+
 import com.example.comicground.api.ClienteAPI;
 
 import retrofit2.Retrofit;
@@ -12,7 +14,6 @@ public class OAuthServer {
     public static IOAuthServer getoAuthServer() {
 
         if (oAuthServer==null) {
-            Retrofit retrofit=ClienteAPI.retrofit;
             oAuthServer= retrofit.create(IOAuthServer.class);
 
         }

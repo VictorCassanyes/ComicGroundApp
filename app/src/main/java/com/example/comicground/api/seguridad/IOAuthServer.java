@@ -16,9 +16,8 @@ public interface IOAuthServer {
     @POST("oauth/token")
     @FormUrlEncoded
     Call<OAuthToken> getAccessToken(
-            @Field("code") String code,
-            @Field("client_id") String client_id,
-            @Field("redirect_uri") String redirect_uri,
+            @Field("username") String username,
+            @Field("password") String password,
             @Field("grant_type") String grant_type
     );
 }

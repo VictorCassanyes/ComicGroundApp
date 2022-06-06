@@ -1,42 +1,31 @@
 package com.example.comicground.api.peticiones;
 
+import java.util.Date;
+
 public class PeticionRegistro {
-
-    private String correo;
-
-    private String nombreDeUsuario;
 
     private String nombre;
 
     private String apellidos;
 
+    private String correo;
+
+    private String nombreDeUsuario;
+
     private String contraseña;
 
     private boolean habilitado;
 
-    public PeticionRegistro(String correo, String nombreDeUsuario, String nombre, String apellidos, String contraseña, boolean habilitado) {
-        this.correo = correo;
-        this.nombreDeUsuario = nombreDeUsuario;
+    private Date fechaCreacion;
+
+    public PeticionRegistro(String nombre, String apellidos, String correo, String nombreDeUsuario, String contraseña, boolean habilitado, Date fechaCreacion) {
         this.nombre = nombre;
         this.apellidos = apellidos;
+        this.correo = correo;
+        this.nombreDeUsuario = nombreDeUsuario;
         this.contraseña = contraseña;
         this.habilitado = habilitado;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getNombreDeUsuario() {
-        return nombreDeUsuario;
-    }
-
-    public void setNombreDeUsuario(String nombreDeUsuario) {
-        this.nombreDeUsuario = nombreDeUsuario;
+        this.fechaCreacion = fechaCreacion;
     }
 
     public String getNombre() {
@@ -55,6 +44,22 @@ public class PeticionRegistro {
         this.apellidos = apellidos;
     }
 
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getNombreDeUsuario() {
+        return nombreDeUsuario;
+    }
+
+    public void setNombreDeUsuario(String nombreDeUsuario) {
+        this.nombreDeUsuario = nombreDeUsuario;
+    }
+
     public String getContraseña() {
         return contraseña;
     }
@@ -70,4 +75,13 @@ public class PeticionRegistro {
     public void setHabilitado(boolean habilitado) {
         this.habilitado = habilitado;
     }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
 }

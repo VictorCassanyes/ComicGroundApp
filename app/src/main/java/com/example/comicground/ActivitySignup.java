@@ -1,18 +1,27 @@
 package com.example.comicground;
 
+import static com.example.comicground.api.ClienteAPI.retrofit;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.material.textfield.TextInputEditText;
+import com.example.comicground.api.Constantes;
+import com.example.comicground.api.endpoints.UsuarioEndpoints;
+import com.example.comicground.api.peticiones.PeticionRegistro;
 import com.google.android.material.textfield.TextInputLayout;
-import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+import java.util.Date;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ActivitySignup extends AppCompatActivity implements View.OnClickListener {
 
@@ -42,7 +51,9 @@ public class ActivitySignup extends AppCompatActivity implements View.OnClickLis
         switch(view.getId()) {
             case R.id.btnRegistro:
                 limpiarErrores();
-                if(comprobarCampos()) {
+                String[] variables=camposAVariables();
+                if(comprobarvariables(variables[0], variables[1], variables[2], variables[3], variables[4], variables[5])) {
+                    registrar(variables[0], variables[1], variables[2], variables[3], variables[5]);
                     Toast.makeText(this, "Campos validados correctamente", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -51,32 +62,32 @@ public class ActivitySignup extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private boolean comprobarCampos() {
+    private boolean comprobarvariables(String nombre, String apellidos, String correo, String confirmarCorreo, String nombreDeUsuario, String contraseña) {
         boolean validado=true;
 
-        if(!comprobarNombre()) {
+        if(!comprobarNombre(nombre)) {
             validado=false;
         }
-        if(!comprobarApellidos()) {
+        if(!comprobarApellidos(apellidos)) {
              validado=false;
         }
-        if(!comprobarCorreo()) {
+        if(!comprobarCorreo(correo)) {
             validado=false;
         }
-        if(!comprobarConfirmacionCorreo()) {
+        if(!comprobarConfirmacionCorreo(correo, confirmarCorreo)) {
             validado=false;
         }
-        if(!comprobarNombreDeUsuario()) {
+        if(!comprobarNombreDeUsuario(nombreDeUsuario)) {
             validado=false;
         }
-        if(!comprobarContraseña()) {
+        if(!comprobarContraseña(contraseña)) {
             validado=false;
         }
         return validado;
     }
 
-    private boolean comprobarNombre() {
-        String nombre=etNombre.getEditText().getText().toString();
+    private boolean comprobarNombre(String nombre) {
+
         if(nombre.equals("")) {
             etNombre.setError("Escriba su nombre");
             return false;
@@ -88,8 +99,8 @@ public class ActivitySignup extends AppCompatActivity implements View.OnClickLis
         return true;
     }
 
-    private boolean comprobarApellidos() {
-        String apellidos=etApellidos.getEditText().getText().toString();
+    private boolean comprobarApellidos(String apellidos) {
+
         if(apellidos.equals("")) {
             etApellidos.setError("Escriba sus apellidos");
             return false;
@@ -101,17 +112,15 @@ public class ActivitySignup extends AppCompatActivity implements View.OnClickLis
         return true;
     }
 
-    private boolean comprobarCorreo() {
-        String correo=etCorreo.getEditText().getText().toString();
+    private boolean comprobarCorreo(String correo) {
         if(!comprobarFormatoCorreo(correo, true)) {
             return false;
         }
         return true;
     }
 
-    private boolean comprobarConfirmacionCorreo() {
-        String correo=etCorreo.getEditText().getText().toString();
-        String confirmarCorreo=etConfirmarCorreo.getEditText().getText().toString();
+    private boolean comprobarConfirmacionCorreo(String correo, String confirmarCorreo) {
+
         if(!comprobarFormatoCorreo(confirmarCorreo, false)) {
             return false;
         }
@@ -144,8 +153,7 @@ public class ActivitySignup extends AppCompatActivity implements View.OnClickLis
         return true;
     }
 
-    private boolean comprobarNombreDeUsuario() {
-        String nombreDeUsuario=etNombreDeUsuario.getEditText().getText().toString();
+    private boolean comprobarNombreDeUsuario(String nombreDeUsuario) {
         if(nombreDeUsuario.equals("")) {
             etNombreDeUsuario.setError("Escriba su nombre de usuario");
             return false;
@@ -157,17 +165,57 @@ public class ActivitySignup extends AppCompatActivity implements View.OnClickLis
         return true;
     }
 
-    private boolean comprobarContraseña() {
-        String contraseña=etContraseña.getEditText().getText().toString();
+    private boolean comprobarContraseña(String contraseña) {
         if(contraseña.equals("")) {
             etContraseña.setError("Escriba su contraseña");
             return false;
         }
-        if(!contraseña.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$")) {
-            etContraseña.setError("La contraseña debe tener una longitud mínima de 8 carácteres, contener un dígito, una mayúscula y una minúscula. No debe tener ningún espacio en blanco");
+
+        if (contraseña.length()<8) {
+            etContraseña.setError("La contraseña debe tener un mínimo de 8 carácteres");
+            return false;
+        }
+        if(!contraseña.matches("(.*[A-Z].*)")) {
+            etContraseña.setError("La contraseña debe contener al menos una letra mayúscula");
+            return false;
+        }
+        if(!contraseña.matches("(.*[a-z].*)")) {
+            etContraseña.setError("La contraseña debe contener al menos una letra minúscula");
+            return false;
+        }
+        if(!contraseña.matches("(.*[0-9].*)")) {
+            etContraseña.setError("La contraseña debe contener al menos un dígito");
             return false;
         }
         return true;
+    }
+
+    //Hacer método asíncrono(?)
+    private void registrar(String nombre, String apellidos, String correo, String nombreDeUsuario, String contraseña) {
+        PeticionRegistro peticion=new PeticionRegistro(nombre, apellidos, correo, nombreDeUsuario, contraseña, true, new Date());
+
+        UsuarioEndpoints usuarioEndpoints=retrofit.create(UsuarioEndpoints.class);
+
+        //Base64.NO_WRAP es un bit indicador del codificador para omitir todos los terminadores de línea (Se hace con esto en Android)
+        String cabeceraAuth="Basic "+ Base64.encodeToString(Constantes.CREDENCIALES_APLICACION.getBytes(), Base64.NO_WRAP);
+
+        Call<ResponseBody> call=usuarioEndpoints.registrar(cabeceraAuth, peticion);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(ActivitySignup.this, "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
+                    //Generar OAuthToken y guardarlo en SharedPreferences
+                    finish();
+                } else {
+                    Toast.makeText(ActivitySignup.this, response.raw().toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(ActivitySignup.this, "Error al registrarse", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void limpiarErrores() {
@@ -179,6 +227,17 @@ public class ActivitySignup extends AppCompatActivity implements View.OnClickLis
         etContraseña.setError(null);
     }
 
+    private String[] camposAVariables() {
+        String nombre=etNombre.getEditText().getText().toString();
+        String apellidos=etApellidos.getEditText().getText().toString();
+        String correo=etCorreo.getEditText().getText().toString();
+        String confirmarCorreo=etConfirmarCorreo.getEditText().getText().toString();
+        String nombreDeUsuario=etNombreDeUsuario.getEditText().getText().toString();
+        String contraseña=etContraseña.getEditText().getText().toString();
+        String[] variables={nombre, apellidos, correo, confirmarCorreo, nombreDeUsuario, contraseña};
+        return variables;
+    }
+
     private void encontrarVistasPorId() {
         etNombre=findViewById(R.id.etNombre);
         etApellidos=findViewById(R.id.etApellidos);
@@ -186,6 +245,7 @@ public class ActivitySignup extends AppCompatActivity implements View.OnClickLis
         etConfirmarCorreo=findViewById(R.id.etConfirmarCorreo);
         etNombreDeUsuario=findViewById(R.id.etNombreDeUsuario);
         etContraseña=findViewById(R.id.etContraseña);
+        etContraseña.setErrorIconDrawable(null);
 
         btnRegistro=findViewById(R.id.btnRegistro);
         btnRegistro.setOnClickListener(this);
