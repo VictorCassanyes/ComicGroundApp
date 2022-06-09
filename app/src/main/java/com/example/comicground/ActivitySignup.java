@@ -5,6 +5,7 @@ import static com.example.comicground.api.ClienteAPI.retrofit;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
@@ -12,12 +13,14 @@ import android.widget.Toast;
 
 import com.example.comicground.api.Constantes;
 import com.example.comicground.api.endpoints.UsuarioEndpoints;
-import com.example.comicground.api.peticiones.PeticionRegistro;
+import com.example.comicground.api.seguridad.AESEncriptacion;
+import com.example.comicground.models.Usuario;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.Date;
 
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,8 +56,7 @@ public class ActivitySignup extends AppCompatActivity implements View.OnClickLis
                 limpiarErrores();
                 String[] variables=camposAVariables();
                 if(comprobarvariables(variables[0], variables[1], variables[2], variables[3], variables[4], variables[5])) {
-                    registrar(variables[0], variables[1], variables[2], variables[3], variables[5]);
-                    Toast.makeText(this, "Campos validados correctamente", Toast.LENGTH_SHORT).show();
+                    new intentarRegistro().execute(variables);
                 }
                 break;
             case R.id.btnSalir:
@@ -190,32 +192,71 @@ public class ActivitySignup extends AppCompatActivity implements View.OnClickLis
         return true;
     }
 
-    //Hacer método asíncrono(?)
-    private void registrar(String nombre, String apellidos, String correo, String nombreDeUsuario, String contraseña) {
-        PeticionRegistro peticion=new PeticionRegistro(nombre, apellidos, correo, nombreDeUsuario, contraseña, true, new Date());
+    private class intentarRegistro extends AsyncTask<String, Void, String>
+    {
+        @Override
+        protected String doInBackground(String... strings) {
 
-        UsuarioEndpoints usuarioEndpoints=retrofit.create(UsuarioEndpoints.class);
+            //Encriptar la contraseña (AESEncriptor)
+            String contraseñaEncriptada=AESEncriptacion.encriptar(strings[5]);
 
-        //Base64.NO_WRAP es un bit indicador del codificador para omitir todos los terminadores de línea (Se hace con esto en Android)
-        String cabeceraAuth="Basic "+ Base64.encodeToString(Constantes.CREDENCIALES_APLICACION.getBytes(), Base64.NO_WRAP);
+                                        //correo, nombreDeUsuario, nombre, apellidos y contraseña
+            Usuario usuario=new Usuario(strings[2], strings[4], strings[0], strings[1], contraseñaEncriptada);
 
-        Call<ResponseBody> call=usuarioEndpoints.registrar(cabeceraAuth, peticion);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(ActivitySignup.this, "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
-                    //Generar OAuthToken y guardarlo en SharedPreferences
-                    finish();
-                } else {
-                    Toast.makeText(ActivitySignup.this, response.raw().toString(), Toast.LENGTH_SHORT).show();
+            UsuarioEndpoints usuarioEndpoints=retrofit.create(UsuarioEndpoints.class);
+
+            //Crear cabecera con credenciales de la aplicación
+            String cabeceraAuth=crearCabeceraAuth();
+
+            Call<ResponseBody> call=usuarioEndpoints.registrar(cabeceraAuth, usuario);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(ActivitySignup.this, "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
+
+                        //Generar OAuthToken
+
+                    } else if(response.code()==HttpURLConnection.HTTP_NOT_ACCEPTABLE) {
+                        Toast.makeText(ActivitySignup.this, "Cambie su nombre de usuario", Toast.LENGTH_SHORT).show();
+                        etNombreDeUsuario.setError("Ese nombre de usuario ya existe");
+                    } else if(response.code()==HttpURLConnection.HTTP_CONFLICT) {
+                        Toast.makeText(ActivitySignup.this, "Utilice un correo electrónico distinto", Toast.LENGTH_SHORT).show();
+                        etCorreo.setError("Ese correo electrónico ya está en uso");
+                    } else {
+                        Toast.makeText(ActivitySignup.this, "Error al registrarse", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(ActivitySignup.this, "Error al registrarse", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(ActivitySignup.this, "Error al conectar con el servidor", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            //return OAuthToken
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            //Guardar OAuthToken en SharedPreferences
+
+            super.onPostExecute(s);
+            finish();
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            Toast.makeText(ActivitySignup.this, "Error al intentar registrarse, el proceso ha sido cancelado", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String crearCabeceraAuth() {
+        //Base64.NO_WRAP sirve como indicador del codificador para omitir todos los terminadores de línea (Se hace así en Android)
+        return "Basic "+ Base64.encodeToString(Constantes.CREDENCIALES_APLICACION.getBytes(), Base64.NO_WRAP);
     }
 
     private void limpiarErrores() {
@@ -234,6 +275,7 @@ public class ActivitySignup extends AppCompatActivity implements View.OnClickLis
         String confirmarCorreo=etConfirmarCorreo.getEditText().getText().toString();
         String nombreDeUsuario=etNombreDeUsuario.getEditText().getText().toString();
         String contraseña=etContraseña.getEditText().getText().toString();
+
         String[] variables={nombre, apellidos, correo, confirmarCorreo, nombreDeUsuario, contraseña};
         return variables;
     }

@@ -2,7 +2,6 @@ package com.example.comicground.api.endpoints;
 
 
 import com.example.comicground.api.peticiones.PeticionInicioSesion;
-import com.example.comicground.api.peticiones.PeticionRegistro;
 import com.example.comicground.api.respuestas.RespuestaInicioSesion;
 import com.example.comicground.models.Usuario;
 
@@ -10,7 +9,6 @@ import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -31,8 +29,8 @@ public interface UsuarioEndpoints {
     @FormUrlEncoded
     Call<RespuestaInicioSesion> iniciarSesion(@Header("Authorization") String cabeceraAuth, @Body PeticionInicioSesion peticionInicioSesion);
 
-    @POST("comicground/usuarios/registro/")
-    Call<ResponseBody> registrar(@Header("Authorization") String cabeceraAuth, @Body PeticionRegistro peticionRegistro);
+    @POST("comicground/usuarios/registro")
+    Call<ResponseBody> registrar(@Header("Authorization") String cabeceraAuth, @Body Usuario usuario);
 
     @PUT("comicground/usuarios/actualizar/")
     Call<Usuario> editarUsuario(@Body Usuario usuario, @Path("id") Integer id);

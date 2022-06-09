@@ -3,9 +3,7 @@ package com.example.comicground.models;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Usuario implements Serializable {
-
-    private static final long serialVersionUID = -57097122962998182L;
+public class Usuario {
 
     private Integer id;
 
@@ -23,7 +21,14 @@ public class Usuario implements Serializable {
 
     private Date fechaCreacion;
 
-    public Usuario() {}
+    public Usuario(String correo, String nombreDeUsuario, String nombre, String apellidos, String contraseña) {
+        this.correo = correo;
+        this.nombreDeUsuario = nombreDeUsuario;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.contraseña = contraseña;
+        this.habilitado = true;
+    }
 
     public Integer getId() {
         return id;
