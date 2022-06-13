@@ -4,16 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivitySearch">
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    tools:context=".activities.ActivityBuscar">
 
             <TextView
                 android:id="@+id/tvNombreApp"
@@ -41,7 +32,7 @@
             <EditText
                 android:id="@+id/etBuscar"
                 android:layout_marginEnd="45dp"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/search"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -63,28 +54,20 @@
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 app:layout_constraintTop_toBottomOf="@+id/etBuscar"
-                app:layout_constraintBottom_toTopOf="@+id/logo"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:orientation="vertical">
 
                 <fragment
+                    android:id="@+id/fragment_comics"
+                    android:name="com.example.comicground.fragments.FragmentComics"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
                 </fragment>
             </LinearLayout>
-
-            <ImageView
-                android:id="@+id/logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_track_changes_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <com.getbase.floatingactionbutton.FloatingActionsMenu
                 android:id="@+id/menufloat"
@@ -125,6 +108,4 @@
                     app:fab_colorNormal="@color/primaryColor"
                     app:fab_colorPressed="@color/primaryLightColor"/>
             </com.getbase.floatingactionbutton.FloatingActionsMenu>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

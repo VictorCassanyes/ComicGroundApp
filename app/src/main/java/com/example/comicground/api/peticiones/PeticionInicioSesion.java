@@ -4,11 +4,11 @@ public class PeticionInicioSesion {
 
     private String nombreDeUsuario;
 
-    private String contraseña;
+    private String contrasena;
 
-    public PeticionInicioSesion(String nombreDeUsuario, String contraseña) {
+    public PeticionInicioSesion(String nombreDeUsuario, String contrasena) {
         this.nombreDeUsuario = nombreDeUsuario;
-        this.contraseña = contraseña;
+        this.contrasena = contrasena;
     }
 
     public String getNombreDeUsuario() {
@@ -19,11 +19,11 @@ public class PeticionInicioSesion {
         this.nombreDeUsuario = nombreDeUsuario;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasena() {
+        return contrasena;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 }

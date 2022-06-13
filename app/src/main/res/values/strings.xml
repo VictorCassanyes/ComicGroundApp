@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ComicGround</string>
     <string name="search">Buscar...</string>
-    <string name="user">Apodo</string>
+    <string name="user">Nombre de usuario</string>
     <string name="pass">Contraseña</string>
     <string name="signup">Registrarse</string>
     <string name="login">Iniciar sesión</string>

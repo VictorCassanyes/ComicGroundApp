@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ActivityComic">
+    tools:context=".activities.ActivityComic">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -27,22 +27,20 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <ImageView
-                android:src="@drawable/ic_baseline_collections_24"
                 android:id="@+id/portada"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="400px"
+                android:layout_height="613px"
                 app:layout_constraintTop_toBottomOf="@+id/tvname"
-                app:layout_constraintBottom_toTopOf="@+id/tvcomic"
+                app:layout_constraintBottom_toTopOf="@+id/titulo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
-                android:id="@+id/tvcomic"
+                android:id="@+id/titulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textSize="24sp"
-                android:text="Titulo del comic"
                 app:layout_constraintTop_toBottomOf="@+id/portada"
                 app:layout_constraintBottom_toTopOf="@+id/line"
                 app:layout_constraintStart_toStartOf="parent"
@@ -53,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="4px"
                 style="@style/line"
-                app:layout_constraintTop_toBottomOf="@+id/tvcomic"
+                app:layout_constraintTop_toBottomOf="@+id/titulo"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -108,10 +106,6 @@
                 app:layout_constraintBottom_toTopOf="@+id/ratingBar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
-                <fragment
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </fragment>
             </LinearLayout>
 
             <RatingBar
@@ -123,19 +117,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-                app:layout_constraintBottom_toTopOf="@+id/etcoment"
+                app:layout_constraintBottom_toTopOf="@+id/etComentar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <EditText
-                android:id="@+id/etcoment"
+                android:id="@+id/etComentar"
                 android:text="Comentar..."
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/ratingBar"
                 app:layout_constraintBottom_toTopOf="@+id/btnEnviar"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                android:inputType="textMultiLine"/>
 
             <Button
                 android:id="@+id/btnEnviar"
@@ -143,7 +138,7 @@
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/etcoment"
+                app:layout_constraintTop_toBottomOf="@+id/etComentar"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>

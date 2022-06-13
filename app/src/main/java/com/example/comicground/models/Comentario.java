@@ -5,8 +5,6 @@ import java.util.Date;
 
 public class Comentario implements Serializable {
 
-    private static final long serialVersionUID = 6461102736445356984L;
-
     private Integer id;
 
     private Comic comic;
@@ -18,6 +16,12 @@ public class Comentario implements Serializable {
     private Date fechaCreacion;
 
     public Comentario() {}
+
+    public Comentario(Comic comic, Usuario usuario, String texto) {
+        this.comic = comic;
+        this.usuario = usuario;
+        this.texto = texto;
+    }
 
     public Integer getId() {
         return id;

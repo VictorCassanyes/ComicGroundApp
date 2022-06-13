@@ -8,14 +8,15 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface ComentarioEndpoints {
 
-    @GET("comentarios/{idComic}/")
-    Call<List<Comentario>> obtenerComentariosPorComic(@Path("idComic") Integer idComic);
+    @GET("comicground/comentarios/{idComic}")
+    Call<List<Comentario>> obtenerComentariosPorComic(@Header("Authorization") String token, @Path("idComic") Integer idComic);
 
-    @POST("comentarios/guardarComentario/")
-    Call<Comentario> guardarComentario(@Body Comentario comentario);
+    @POST("comicground/comentarios/comentar")
+    Call<Comentario> guardarComentario(@Header("Authorization") String token, @Body Comentario comentario);
 }

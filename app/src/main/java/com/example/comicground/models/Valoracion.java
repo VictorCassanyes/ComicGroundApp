@@ -5,8 +5,6 @@ import java.util.Date;
 
 public class Valoracion implements Serializable {
 
-    private static final long serialVersionUID = 1700429166736660996L;
-
     private Integer id;
 
     private Comic comic;
@@ -18,6 +16,12 @@ public class Valoracion implements Serializable {
     private Date fechaCreacion;
 
     public Valoracion() {}
+
+    public Valoracion(Comic comic, Usuario usuario, int puntuacion) {
+        this.comic = comic;
+        this.usuario = usuario;
+        this.puntuacion = puntuacion;
+    }
 
     public Integer getId() {
         return id;

@@ -3,7 +3,7 @@ package com.example.comicground.models;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Usuario {
+public class Usuario implements Serializable {
 
     private Integer id;
 
@@ -15,18 +15,18 @@ public class Usuario {
 
     private String apellidos;
 
-    private String contraseña;
+    private String contrasena;
 
     private boolean habilitado;
 
     private Date fechaCreacion;
 
-    public Usuario(String correo, String nombreDeUsuario, String nombre, String apellidos, String contraseña) {
+    public Usuario(String correo, String nombreDeUsuario, String nombre, String apellidos, String contrasena) {
         this.correo = correo;
         this.nombreDeUsuario = nombreDeUsuario;
         this.nombre = nombre;
         this.apellidos = apellidos;
-        this.contraseña = contraseña;
+        this.contrasena = contrasena;
         this.habilitado = true;
     }
 
@@ -70,12 +70,12 @@ public class Usuario {
         this.apellidos = apellidos;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasena() {
+        return contrasena;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     public boolean isHabilitado() {

@@ -4,7 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ActivitySignup">
+    tools:context=".activities.ActivityRegistro">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -23,8 +33,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/tvNombreApp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvNombreApp"
@@ -115,7 +124,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:hint="@string/user"
-                app:layout_constraintBottom_toTopOf="@+id/etContraseña"
+                app:layout_constraintBottom_toTopOf="@+id/etContrasena"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etConfirmarCorreo">
@@ -126,7 +135,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etContraseña"
+                android:id="@+id/etContrasena"
                 style="@style/editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -155,7 +164,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/btnSalir"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etContraseña" />
+                app:layout_constraintTop_toBottomOf="@+id/etContrasena" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnSalir"

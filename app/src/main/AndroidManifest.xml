@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.comicground">
-    
+
+    <!-- Permisos para la conexión Internet -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- usesCleartextTraffic=true necesario para poder usar la API -->
     <application
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
@@ -15,16 +16,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ComicGround">
         <activity
-            android:name=".ActivityComic"
+            android:name=".activities.ActivityComic"
             android:exported="false" />
         <activity
-            android:name=".ActivitySignup"
+            android:name=".activities.ActivityRegistro"
             android:exported="false" />
         <activity
-            android:name=".ActivitySearch"
+            android:name=".activities.ActivityBuscar"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.ActivityInicio"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
