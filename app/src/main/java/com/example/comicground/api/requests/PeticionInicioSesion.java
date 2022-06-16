@@ -1,4 +1,4 @@
-package com.example.comicground.api.peticiones;
+package com.example.comicground.api.requests;
 
 public class PeticionInicioSesion {
 

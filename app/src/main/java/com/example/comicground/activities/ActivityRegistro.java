@@ -168,6 +168,10 @@ public class ActivityRegistro extends AppCompatActivity implements View.OnClickL
             etNombreDeUsuario.setError("Escriba su nombre de usuario");
             return false;
         }
+        if(nombreDeUsuario.length()>20) {
+            etNombreDeUsuario.setError("El nombre de usuario no puede ser de más de 20 carácteres");
+            return false;
+        }
         return true;
     }
 
@@ -178,21 +182,21 @@ public class ActivityRegistro extends AppCompatActivity implements View.OnClickL
         }
 
         if (contrasena.length()<8) {
-            etContrasena.setError("La contrasena debe tener un mínimo de 8 carácteres");
+            etContrasena.setError("La contraseña debe tener un mínimo de 8 carácteres");
             return false;
         }
 
         //Regex para contraseña y con un error distinto por cada uno
         if(!contrasena.matches("(.*[A-Z].*)")) {
-            etContrasena.setError("La contrasena debe contener al menos una letra mayúscula");
+            etContrasena.setError("La contraseña debe contener al menos una letra mayúscula");
             return false;
         }
         if(!contrasena.matches("(.*[a-z].*)")) {
-            etContrasena.setError("La contrasena debe contener al menos una letra minúscula");
+            etContrasena.setError("La contraseña debe contener al menos una letra minúscula");
             return false;
         }
         if(!contrasena.matches("(.*[0-9].*)")) {
-            etContrasena.setError("La contrasena debe contener al menos un dígito");
+            etContrasena.setError("La contraseña debe contener al menos un dígito");
             return false;
         }
         return true;

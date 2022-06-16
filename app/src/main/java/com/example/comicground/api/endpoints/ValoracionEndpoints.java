@@ -5,6 +5,7 @@ import com.example.comicground.models.Valoracion;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -18,5 +19,5 @@ public interface ValoracionEndpoints {
     Call<List<Valoracion>> obtenerValoracionesPorComic(@Header("Authorization") String token, @Path("idComic") Integer idComic);
 
     @POST("comicground/valoraciones/valorar")
-    Call<Valoracion> guardarValoracion(@Header("Authorization") String token, @Body Valoracion valoracion);
+    Call<ResponseBody> guardarValoracion(@Header("Authorization") String token, @Body Valoracion valoracion);
 }

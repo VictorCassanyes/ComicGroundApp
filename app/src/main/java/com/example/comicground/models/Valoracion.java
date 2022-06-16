@@ -11,13 +11,11 @@ public class Valoracion implements Serializable {
 
     private Usuario usuario;
 
-    private int puntuacion;
-
-    private Date fechaCreacion;
+    private float puntuacion;
 
     public Valoracion() {}
 
-    public Valoracion(Comic comic, Usuario usuario, int puntuacion) {
+    public Valoracion(Comic comic, Usuario usuario, float puntuacion) {
         this.comic = comic;
         this.usuario = usuario;
         this.puntuacion = puntuacion;
@@ -47,20 +45,12 @@ public class Valoracion implements Serializable {
         this.usuario = usuario;
     }
 
-    public int getPuntuacion() {
+    public float getPuntuacion() {
         return puntuacion;
     }
 
-    public void setPuntuacion(int puntuacion) {
+    public void setPuntuacion(float puntuacion) {
         this.puntuacion = puntuacion;
-    }
-
-    public Date getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(Date fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
     }
 
 }

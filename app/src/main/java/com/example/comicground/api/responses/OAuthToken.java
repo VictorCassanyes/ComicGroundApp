@@ -1,4 +1,4 @@
-package com.example.comicground.models;
+package com.example.comicground.api.responses;
 
 import com.google.gson.annotations.SerializedName;
 

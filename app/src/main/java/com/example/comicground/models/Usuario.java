@@ -19,8 +19,6 @@ public class Usuario implements Serializable {
 
     private boolean habilitado;
 
-    private Date fechaCreacion;
-
     public Usuario(String correo, String nombreDeUsuario, String nombre, String apellidos, String contrasena) {
         this.correo = correo;
         this.nombreDeUsuario = nombreDeUsuario;
@@ -84,14 +82,6 @@ public class Usuario implements Serializable {
 
     public void setHabilitado(boolean habilitado) {
         this.habilitado = habilitado;
-    }
-
-    public Date getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(Date fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
     }
 
 }

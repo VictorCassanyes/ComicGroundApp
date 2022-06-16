@@ -16,7 +16,7 @@ import retrofit2.http.Path;
 public interface ComicEndpoints {
 
     @GET("comicground/comics")
-    Call<List<Comic>> obtenerTodosLosComics(@Header("Authorization") String token);
+    Call<List<Comic>> obtenerComicsRecientes(@Header("Authorization") String token);
 
     @POST("comicground/comics")
     Call<List<Comic>> obtenerComicsPorTitulo(@Header("Authorization") String token, @Body String titulo);

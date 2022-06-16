@@ -3,15 +3,35 @@
     <string name="search">Buscar...</string>
     <string name="user">Nombre de usuario</string>
     <string name="pass">Contraseña</string>
-    <string name="signup">Registrarse</string>
-    <string name="login">Iniciar sesión</string>
-    <string name="firstname">Nombre</string>
-    <string name="lastname">Apellidos</string>
+    <string name="signUp">Registrarse</string>
+    <string name="logIn">Iniciar sesión</string>
+    <string name="firstName">Nombre</string>
+    <string name="lastName">Apellidos</string>
     <string name="email">Correo electrónico</string>
-    <string name="emailc">Confirmar correo electrónico</string>
+    <string name="emailConfirm">Confirmar correo electrónico</string>
+    <string name="keepLoggedIn">¿Mantener sesión iniciada?</string>
+    <string name="send">Enviar</string>
+    <string name="comment">Comentar...</string>
+    <string name="back">Atrás</string>
+
+    <string name="lastComics">- Cómics más recientes -</string>
+    <string name="foundComics">- Hemos encontrado</string>
+    <string name="comics">cómics con un nombre similar -</string>
+    <string name="noComics">Oops... no hemos podido encontrar nada</string>
+    <string name="noMoreComics">Lo siento... has llegado al final</string>
+
+    <string name="noRatings">No ha valorado nadie todavía, ¡sé el primero!</string>
+    <string name="ratings">valoracion/es</string>
+    <string name="stars">estrella/s</string>
+    <string name="rateAndComment">¡Valora y da tu opinión sobre este cómic!</string>
+
+    <string name="error">Error inesperado</string>
+    <string name="errorServer">No se ha podido establecer conexión con el servidor</string>
+    <string name="errorUser">El usuario o contraseña son incorrectos</string>
+    <string name="errorNotFound">No se ha encontrado ningún resultado</string>
 
     <!--Quizá no sean necesarios -->
-    <string name="profile">Perfil</string>
+    <string name="profile">Tu perfil</string>
     <string name="settings">Configuración</string>
     <string name="exit">Salir</string>
 </resources>

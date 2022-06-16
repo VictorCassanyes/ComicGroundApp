@@ -5,7 +5,9 @@ import com.example.comicground.models.Comic;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -18,5 +20,5 @@ public interface ComentarioEndpoints {
     Call<List<Comentario>> obtenerComentariosPorComic(@Header("Authorization") String token, @Path("idComic") Integer idComic);
 
     @POST("comicground/comentarios/comentar")
-    Call<Comentario> guardarComentario(@Header("Authorization") String token, @Body Comentario comentario);
+    Call<ResponseBody> guardarComentario(@Header("Authorization") String token, @Body Comentario comentario);
 }

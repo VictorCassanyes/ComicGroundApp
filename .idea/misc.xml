@@ -4,19 +4,31 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1605" />
-        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/activity_buscar.xml" value="0.22" />
-        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/activity_comic.xml" value="0.2696629213483146" />
-        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/activity_inicio.xml" value="0.1" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/drawable/exit_dark.xml" value="0.1465" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/drawable/ic_baseline_collections_24.xml" value="0.1465" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/drawable/ic_baseline_track_changes_24.xml" value="0.1465" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/drawable/profile_dark.xml" value="0.1465" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/drawable/search.xml" value="0.1465" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/drawable/search_dark.xml" value="0.1395" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/drawable/settings.xml" value="0.1465" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/drawable/settings_dark.xml" value="0.1465" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/activity_buscar.xml" value="0.25" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/activity_comic.xml" value="0.33" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/activity_inicio.xml" value="0.25" />
         <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/activity_register.xml" value="0.27291666666666664" />
-        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/activity_registro.xml" value="0.1" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/activity_registro.xml" value="0.25" />
         <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/activity_search.xml" value="0.25" />
         <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/activity_signin.xml" value="0.25" />
         <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/activity_signup.xml" value="0.1" />
         <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/element_adapter_comentarios.xml" value="0.19537624660018132" />
         <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/element_adapter_comics.xml" value="0.19900271985494106" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/footer_lista_comentarios.xml" value="0.2071622846781505" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/footer_lista_comics.xml" value="0.33" />
         <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/fragment_comentarios.xml" value="0.19537624660018132" />
         <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/fragment_comics.xml" value="0.19900271985494106" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/header_lista_comics.xml" value="0.19673617407071622" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/layout/layout_cargando.xml" value="0.19673617407071622" />
         <entry key="..\:/Users/victo/AndroidStudioProjects/ComicGround/app/src/main/res/xml/network_security_config.xml" value="0.22402736212056434" />
       </map>
     </option>

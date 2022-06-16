@@ -13,6 +13,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
     </style>
 
+    <!-- EditText Material Design -->
     <style name="editText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxCornerRadiusTopStart">18dp</item>
         <item name="boxCornerRadiusTopEnd">18dp</item>
@@ -22,6 +23,7 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <!-- Botones Material Design -->
     <style name="buttonColored" parent="Widget.AppCompat.Button.Colored">
         <item name="android:backgroundTint">@color/primaryColor</item>
     </style>
@@ -30,18 +32,36 @@
         <item name="android:textColor">@color/primaryColor</item>
     </style>
 
-    <style name="imageView">
-        <item name="android:background">@color/white</item>
-    </style>
-
-    <style name="appName" parent="Theme.ComicGround">
+    <!-- Textos -->
+    <style name="textos" parent="Theme.ComicGround">
         <item name="android:textColor">@color/primaryColor</item>
         <item name="android:fontFamily">casual</item>
-        <item name="android:textSize">50sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
+    <style name="textosVarios" parent="Theme.ComicGround">
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-condensed-light</item>
+        <item name="android:textColor">@color/secondaryDarkestColor</item>
+    </style>
+
+    <!-- Visual -->
     <style name="line" parent="Theme.ComicGround">
-        <item name="android:background">@color/secondaryColor</item>
+        <item name="android:background">@color/secondaryDarkColor</item>
+    </style>
+
+    <style name="logo" parent="Theme.ComicGround">
+        <item name="android:src">@drawable/logo</item>
+    </style>
+
+    <style name="search" parent="Theme.ComicGround">
+        <item name="android:src">@drawable/search</item>
+        <item name="android:backgroundTint">@android:color/transparent</item>
+    </style>
+
+    <style name="ratingBar" parent="Theme.ComicGround">
+        <item name="android:progressTint">@color/primaryColor</item>
+        <item name="android:secondaryProgressTint">@android:color/transparent</item>
     </style>
 </resources>

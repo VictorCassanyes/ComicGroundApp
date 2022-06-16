@@ -12,14 +12,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.comicground.R;
 import com.example.comicground.api.endpoints.OAuthEndpoints;
 import com.example.comicground.api.endpoints.UsuarioEndpoints;
-import com.example.comicground.api.peticiones.PeticionInicioSesion;
-import com.example.comicground.models.OAuthToken;
+import com.example.comicground.api.requests.PeticionInicioSesion;
+import com.example.comicground.api.responses.OAuthToken;
 import com.example.comicground.models.Usuario;
 import com.example.comicground.utils.AESEncriptacion;
 import com.example.comicground.utils.Constantes;
@@ -28,7 +30,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.io.IOException;
 import java.util.Date;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -36,6 +37,7 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
 
     //Vistas
     ProgressBar progressBar;
+    CheckBox cbMantenerSesion;
     TextInputLayout etNombreDeUsuario;
     TextInputLayout etContrasena;
     AppCompatButton btnIniciarSesion;
@@ -51,6 +53,10 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
     Long expiresAt;
     String token;
     String refresh_token;
+    boolean mantenerSesion;
+
+    //Datos de Intent
+    boolean sesionCerrada;
 
     //Para mandar al siguiente Intent como extra
     Usuario usuario;
@@ -58,13 +64,21 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inicio);
+        //Asignar Layout inicial
+        setContentView(R.layout.layout_cargando);
         //Ocultar barra superior
         getSupportActionBar().hide();
-        //Asignar vistas a los objetos y algunas características
-        encontrarVistasPorId();
-        //Mantener sesión iniciada si el token no ha caducado (y si había datos en las preferencias compartidas)
-        //mantenerSesionIniciada();
+        //Obtener si la sesión ha sido cerrada de los extras del Intent
+        sesionCerrada=getIntent().getBooleanExtra("sesionCerrada", false);
+        //Si la sesión ha sido cerrada
+        if(sesionCerrada) {
+            //Asignar Layout, vistas a los objetos y algunas características
+            asignarLayoutYVistas();
+        //Si no ha sido cerrada se intenta mantener la sesión iniciada
+        } else {
+            //Mantener sesión iniciada si así lo desea el usuario y si el token no está caducado (y si existen preferencias compartidas)
+            mantenerSesionIniciada();
+        }
     }
 
     @Override
@@ -106,6 +120,10 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
             etNombreDeUsuario.setError("Escriba su nombre de usuario");
             return false;
         }
+        if(nombreDeUsuario.length()>20) {
+            etNombreDeUsuario.setError("El nombre de usuario no puede ser de más de 20 carácteres");
+            return false;
+        }
         return true;
     }
 
@@ -114,6 +132,12 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
             etContrasena.setError("Escriba su contraseña");
             return false;
         }
+
+        if (contrasena.length()<8) {
+            etContrasena.setError("La contraseña debe tener un mínimo de 8 carácteres");
+            return false;
+        }
+
         return true;
     }
 
@@ -128,13 +152,24 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
         limpiarErrores();
     }
 
-    private void encontrarVistasPorId() {
+    private void asignarLayoutYVistas() {
+        //Asignar el Layout
+        setContentView(R.layout.activity_inicio);
         //Encontrar las vistas de la interfaz gráfica y pasarlas a sus objetos
         progressBar=findViewById(R.id.progressBar);
+        cbMantenerSesion=findViewById(R.id.cbMantenerSesion);
         etNombreDeUsuario=findViewById(R.id.etNombreDeUsuario);
         etContrasena=findViewById(R.id.etContrasena);
         btnIniciarSesion=findViewById(R.id.btnIniciarSesion);
         btnRegistro=findViewById(R.id.btnRegistro);
+
+        //Asignar OnCheckedChanged al CheckBox
+        cbMantenerSesion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                mantenerSesion=checked;
+            }
+        });
 
         //Asignar el OnClickListener a los botones
         btnIniciarSesion.setOnClickListener(this);
@@ -206,7 +241,7 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
             //Encriptar la contraseña (AES)
             String contrasenaEncriptada= AESEncriptacion.encriptar(contrasena);
 
-            //Obtener el nombre de usuario, token y momento en el que este expira de las preferencias compartidas
+            //Obtener los datos de las preferencias compartidas
             obtenerDatos();
 
             //Comprobar si las preferencias compartidas son de este usuario (o si existen preferencias compartidas)
@@ -218,9 +253,10 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
                 //Llamar de nuevo a /oauth/token y guardar los datos en preferencias compartidas
                 respuesta=obtenerOAuthToken(nombreDeUsuario, contrasenaEncriptada);
             }
-
-            //Si la obtención del token ha sido correcta, entonces se intenta iniciar sesión
+            //Si la obtención del token ha sido correcta o no se ha necesitado obtener uno nuevo
             if(respuesta==Constantes.OK) {
+                //Actualizar la variable mantener_sesion_iniciada de las preferencias compartidas
+                guardarMantenerSesion();
                 //Crear el objeto petición
                 PeticionInicioSesion peticion=new PeticionInicioSesion(nombreDeUsuario, contrasenaEncriptada);
                 //Intentar el inicio de sesión llamando a la API a través de Retrofit
@@ -257,7 +293,7 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
 
         //Realizar llamada al endpoint y mandar los datos necesarios al servidor
         try {
-            Call<Usuario> call=usuarioEndpoints.iniciarSesion("Bearer " + token, peticion);
+            Call<Usuario> call=usuarioEndpoints.iniciarSesion(token, peticion);
             Response<Usuario> response=call.execute();
             if(response.isSuccessful()) {
                 respuesta=Constantes.OK;
@@ -288,6 +324,8 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
                 Long expiresAt=new Date().getTime()+(response.body().getExpiresIn()*1000);
                 //Guardar Token y credenciales del usuario
                 guardarDatos(response.body().getAccessToken(), response.body().getRefreshToken(), expiresAt, nombreDeUsuario, contrasenaEncriptada);
+                //Actualizar las variables con los nuevos datos de preferencias compartidas
+                obtenerDatos();
             } else {
                 respuesta=Constantes.ERROR_CREDENCIALES;
             }
@@ -301,17 +339,14 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
         switch(respuesta) {
             case Constantes.OK:
                 //Ir a la siguiente Activity
-                Intent irABuscar=new Intent(getApplicationContext(), ActivityBuscar.class);
-                irABuscar.putExtra("usuario", usuario);
-                irABuscar.putExtra("token", token);
-                startActivity(irABuscar);
+                crearIntent();
                 //Terminar esta Activity
                 finish();
                 break;
             case Constantes.ERROR_CREDENCIALES:
                 //El usuario no existe o la contraseña es incorrecta
                 etNombreDeUsuario.setError(" ");
-                etContrasena.setError("\n\n\nEl nombre de usuario o la contraseña no son correctos");
+                etContrasena.setError("\nEl nombre de usuario o la contraseña no son correctos");
                 break;
             case Constantes.ERROR_SERVIDOR:
                 Toast.makeText(getApplicationContext(), "Error al conectar con el servidor", Toast.LENGTH_SHORT).show();
@@ -322,7 +357,7 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
         //Guardar token y credenciales del usuario en las preferencias compartidas
         SharedPreferences datosUsuario=getApplicationContext().getSharedPreferences(Constantes.PREFERENCIAS_COMPARTIDAS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=datosUsuario.edit();
-        editor.putString("access_token", token);
+        editor.putString("access_token",Constantes.TIPO_TOKEN+token);
         editor.putString("refresh_token", refreshToken);
         editor.putLong("expires_at", expiresAt);
         editor.putString("nombre_de_usuario", nombreDeUsuario);
@@ -350,36 +385,61 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
         return "Basic "+ Base64.encodeToString(Constantes.CREDENCIALES_APLICACION.getBytes(), Base64.NO_WRAP);
     }
 
-//    private void mantenerSesionIniciada() {
-//        obtenerDatos();
-//        if(nombreDeUsuarioPrefComp.equals("")) {
-//            return;
-//        }
-//        if((expiresAt-new Date().getTime())<0) {
-//            return;
-//        }
-//        new IntentarMantenerSesionIniciada().execute();
-//    }
-//
-//    private class IntentarMantenerSesionIniciada extends AsyncTask<Void, Void, Integer> {
-//
-//        @Override
-//        protected Integer doInBackground(Void... voids) {
-//            PeticionInicioSesion peticion=new PeticionInicioSesion(nombreDeUsuarioPrefComp, contrasenaPrefComp);
-//            int respuesta=intentarIniciarSesion(token, peticion);
-//            return respuesta;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Integer respuesta) {
-//            super.onPostExecute(respuesta);
-//            if(respuesta==Constantes.OK) {
-//                //Ir a la siguiente Activity
-//                Intent irABuscar=new Intent(getApplicationContext(), ActivityBuscar.class);
-//                startActivity(irABuscar);
-//                //Terminar esta Activity
-//                finish();
-//            }
-//        }
-//    }
+    private void obtenerMantenerSesion() {
+        //Obtener las preferencias compartidas, solo la variable mantener_sesion_iniciada
+        SharedPreferences datosUsuario=getSharedPreferences(Constantes.PREFERENCIAS_COMPARTIDAS, Context.MODE_PRIVATE);
+        mantenerSesion=datosUsuario.getBoolean("mantener_sesion_iniciada", false);
+    }
+
+    private void guardarMantenerSesion() {
+        //Se actualizan las preferencias compartidas, solo la variable mantener_sesion_iniciada
+        SharedPreferences.Editor datosUsuario=getApplicationContext().getSharedPreferences(Constantes.PREFERENCIAS_COMPARTIDAS, Context.MODE_PRIVATE).edit();
+        datosUsuario.putBoolean("mantener_sesion_iniciada", mantenerSesion);
+        datosUsuario.apply();
+    }
+
+    private void mantenerSesionIniciada() {
+        //Obtener preferencias compartidas
+        obtenerDatos();
+        obtenerMantenerSesion();
+        //Si no hay preferencias compartidas, o si no se quiere mantener la sesión iniciada o si el token ha expirado
+        if(nombreDeUsuarioPrefComp.equals("") || !mantenerSesion || (expiresAt-new Date().getTime())<0) {
+            //Asignar Layout, vistas a los objetos y algunas características
+            asignarLayoutYVistas();
+            return;
+        }
+        //Iniciar tarea asíncrona para iniciar la sesión
+        new IntentarMantenerSesionIniciada().execute();
+    }
+
+    private class IntentarMantenerSesionIniciada extends AsyncTask<Void, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            PeticionInicioSesion peticion=new PeticionInicioSesion(nombreDeUsuarioPrefComp, contrasenaPrefComp);
+            int respuesta=intentarIniciarSesion(token, peticion);
+            return respuesta;
+        }
+
+        @Override
+        protected void onPostExecute(Integer respuesta) {
+            super.onPostExecute(respuesta);
+            if(respuesta==Constantes.OK) {
+                //Ir a la siguiente Activity
+                crearIntent();
+                //Terminar esta Activity
+                finish();
+            } else {
+                //Asignar Layout, vistas a los objetos y algunas características
+                asignarLayoutYVistas();
+            }
+        }
+    }
+
+    private void crearIntent() {
+        Intent irABuscar=new Intent(getApplicationContext(), ActivityBuscar.class);
+        irABuscar.putExtra("usuario", usuario);
+        irABuscar.putExtra("token", token);
+        startActivity(irABuscar);
+    }
  }

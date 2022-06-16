@@ -9,28 +9,18 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/tvname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                style="@style/appName"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/portada"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
             <ImageView
                 android:id="@+id/portada"
-                android:layout_width="400px"
-                android:layout_height="613px"
-                app:layout_constraintTop_toBottomOf="@+id/tvname"
+                android:layout_marginTop="20dp"
+                android:layout_width="520px"
+                android:layout_height="796.9px"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/titulo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -39,17 +29,17 @@
                 android:id="@+id/titulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="24sp"
+                style="@style/textos"
+                android:textSize="20sp"
                 app:layout_constraintTop_toBottomOf="@+id/portada"
                 app:layout_constraintBottom_toTopOf="@+id/line"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <TextView
+            <View
                 android:id="@+id/line"
                 android:layout_width="match_parent"
-                android:layout_height="4px"
+                android:layout_height="4dp"
                 style="@style/line"
                 app:layout_constraintTop_toBottomOf="@+id/titulo"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout1"
@@ -64,84 +54,58 @@
                 app:layout_constraintBottom_toTopOf="@+id/line2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/line3"
-                    android:layout_width="4px"
-                    android:layout_height="wrap_content"
-                    style="@style/line"/>
+                    android:layout_marginStart="10dp"
+                    android:id="@+id/media"
+                    style="@style/textosVarios"
+                    android:textSize="14sp"
+                    android:gravity="center|end"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
                     <RatingBar
-                        android:rating="1"
+                        android:id="@+id/valoracionMediaUsuarios"
+                        android:layout_marginStart="10dp"
+                        android:isIndicator="true"
+                        style="@style/ratingBar"
+                        android:rating="0"
+                        android:numStars="5"
                         android:max="10"
-                        android:stepSize="0.5"
-                        android:layout_weight="0.5"
+                        android:stepSize="0.25"
+                        android:layout_weight="0"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
-                    <TextView
-                        android:id="@+id/tvrate"
-                        android:text="Media de valoraciones de usuarios"
-                        android:layout_weight="0.5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
             </LinearLayout>
 
-            <TextView
+            <View
                 android:id="@+id/line2"
                 android:layout_width="match_parent"
-                android:layout_height="4px"
+                android:layout_height="4dp"
                 style="@style/line"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout1"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayoutFragmento"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <LinearLayout
-                android:id="@+id/linearLayout2"
+                android:id="@+id/linearLayoutFragmento"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/line2"
-                app:layout_constraintBottom_toTopOf="@+id/ratingBar"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-            </LinearLayout>
-
-            <RatingBar
-                android:id="@+id/ratingBar"
-                android:rating="1"
-                android:max="10"
-                android:stepSize="0.5"
-                style="@style/Widget.AppCompat.RatingBar.Small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-                app:layout_constraintBottom_toTopOf="@+id/etComentar"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-            <EditText
-                android:id="@+id/etComentar"
-                android:text="Comentar..."
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/ratingBar"
-                app:layout_constraintBottom_toTopOf="@+id/btnEnviar"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:inputType="textMultiLine"/>
-
-            <Button
-                android:id="@+id/btnEnviar"
-                android:text="Enviar"
-                android:textColor="@color/white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/etComentar"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent">
+                <fragment
+                    android:id="@+id/fragmentoComentarios"
+                    android:name="com.example.comicground.fragments.FragmentComentarios"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

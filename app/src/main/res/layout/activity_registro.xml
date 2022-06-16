@@ -25,11 +25,11 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                style="@style/logo"
                 android:id="@+id/logo"
                 android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_track_changes_24"
                 app:layout_constraintBottom_toTopOf="@+id/tvNombreApp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +37,8 @@
 
             <TextView
                 android:id="@+id/tvNombreApp"
-                style="@style/appName"
+                style="@style/textos"
+                android:textSize="45sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="20dp"
@@ -53,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:hint="@string/firstname"
+                android:hint="@string/firstName"
                 app:layout_constraintBottom_toTopOf="@+id/etApellidos"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:hint="@string/lastname"
+                android:hint="@string/lastName"
                 app:layout_constraintBottom_toTopOf="@+id/etCorreo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -105,7 +106,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:hint="@string/emailc"
+                android:hint="@string/emailConfirm"
                 app:layout_constraintBottom_toTopOf="@+id/etNombreDeUsuario"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -160,7 +161,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:text="@string/signup"
+                android:text="@string/signUp"
                 app:layout_constraintBottom_toTopOf="@+id/btnSalir"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

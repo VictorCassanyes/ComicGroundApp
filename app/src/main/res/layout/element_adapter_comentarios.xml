@@ -3,27 +3,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tvNombreDeUsuario"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        style="@style/textos"
+        android:textSize="16sp"
+        android:textAlignment="textStart"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"/>
 
-        <TextView
-            android:id="@+id/tvNombreDeUsuario"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8"/>
-
-        <TextView
-            android:id="@+id/tvTexto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.2"/>
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tvTexto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/textosVarios"
+        android:textSize="16sp"
+        android:gravity="center|start"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="5dp"/>
 
     <TextView
         android:id="@+id/tvFechaComentario"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="10dp"
+        style="@style/textosVarios"
+        android:textSize="10sp"
+        android:gravity="center|start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

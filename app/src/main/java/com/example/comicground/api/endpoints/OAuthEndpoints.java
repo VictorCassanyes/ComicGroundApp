@@ -1,6 +1,6 @@
 package com.example.comicground.api.endpoints;
 
-import com.example.comicground.models.OAuthToken;
+import com.example.comicground.api.responses.OAuthToken;
 
 import retrofit2.Call;
 import retrofit2.http.Field;

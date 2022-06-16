@@ -13,7 +13,7 @@ public class Comentario implements Serializable {
 
     private String texto;
 
-    private Date fechaCreacion;
+    private String fechaCreacion;
 
     public Comentario() {}
 
@@ -21,6 +21,7 @@ public class Comentario implements Serializable {
         this.comic = comic;
         this.usuario = usuario;
         this.texto = texto;
+        this.fechaCreacion = String.valueOf(new Date());
     }
 
     public Integer getId() {
@@ -55,12 +56,7 @@ public class Comentario implements Serializable {
         this.texto = texto;
     }
 
-    public Date getFechaCreacion() {
-        return fechaCreacion;
-    }
+    public String getFechaCreacion() { return fechaCreacion; }
 
-    public void setFechaCreacion(Date fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
+    public void setFechaCreacion(String fechaCreacion) { this.fechaCreacion = fechaCreacion; }
 }

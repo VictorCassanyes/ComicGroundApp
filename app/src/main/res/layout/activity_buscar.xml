@@ -6,32 +6,75 @@
     android:layout_height="match_parent"
     tools:context=".activities.ActivityBuscar">
 
-            <TextView
-                android:id="@+id/tvNombreApp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="34dp"
-                android:text="@string/app_name"
-                style="@style/appName"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/line"/>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-            <TextView
+    <TextView
+        android:id="@+id/noHayComics"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/noComics"
+        style="@style/textosVarios"
+        android:textSize="16sp"
+        android:textAlignment="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+            <LinearLayout
+                android:id="@+id/linearLayoutNombreApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/line">
+
+                <TextView
+                    android:id="@+id/tvNombreApp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"
+                    android:layout_weight="1"
+                    android:textAlignment="textEnd"
+                    style="@style/textos"
+                    android:textSize="45sp"/>
+
+                <ImageView
+                    style="@style/logo"
+                    android:id="@+id/logo"
+                    android:layout_marginStart="10dp"
+                    android:scaleType="fitStart"
+                    android:layout_weight="1"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"/>
+
+            </LinearLayout>
+            <View
                 android:id="@+id/line"
                 android:layout_width="match_parent"
-                android:layout_height="4px"
+                android:layout_height="4dp"
+                android:layout_marginTop="10dp"
                 style="@style/line"
-                android:layout_marginTop="20dp"
                 app:layout_constraintBottom_toTopOf="@+id/etBuscar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvNombreApp" />
+                app:layout_constraintTop_toBottomOf="@+id/linearLayoutNombreApp" />
 
             <EditText
                 android:id="@+id/etBuscar"
-                android:layout_marginEnd="45dp"
+                android:layout_marginEnd="50dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/search"
@@ -42,27 +85,37 @@
 
             <ImageButton
                 android:id="@+id/btnBuscar"
-                style="@style/imageView"
+                style="@style/search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/search"
                 app:layout_constraintTop_toBottomOf="@+id/line"
                 app:layout_constraintStart_toEndOf="@+id/etBuscar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="@+id/etBuscar"/>
 
+            <View
+                android:id="@+id/line2"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_marginTop="5dp"
+                style="@style/line"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etBuscar" />
+
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                app:layout_constraintTop_toBottomOf="@+id/etBuscar"
+                app:layout_constraintTop_toBottomOf="@+id/line2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:orientation="vertical">
 
                 <fragment
-                    android:id="@+id/fragment_comics"
+                    android:id="@+id/fragmentoComics"
                     android:name="com.example.comicground.fragments.FragmentComics"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -88,7 +141,7 @@
                     android:id="@+id/btnPerfil"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:fab_icon="@drawable/profile"
+                    app:fab_icon="@drawable/profile_dark"
                     app:fab_colorNormal="@color/primaryColor"
                     app:fab_colorPressed="@color/primaryLightColor"/>
 
@@ -96,7 +149,7 @@
                     android:id="@+id/btnConfiguracion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:fab_icon="@drawable/settings"
+                    app:fab_icon="@drawable/settings_dark"
                     app:fab_colorNormal="@color/primaryColor"
                     app:fab_colorPressed="@color/primaryLightColor"/>
 
@@ -104,7 +157,7 @@
                     android:id="@+id/btnSalir"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:fab_icon="@drawable/exit"
+                    app:fab_icon="@drawable/exit_dark"
                     app:fab_colorNormal="@color/primaryColor"
                     app:fab_colorPressed="@color/primaryLightColor"/>
             </com.getbase.floatingactionbutton.FloatingActionsMenu>
