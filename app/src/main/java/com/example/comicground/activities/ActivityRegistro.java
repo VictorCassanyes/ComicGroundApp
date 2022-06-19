@@ -1,11 +1,11 @@
 package com.example.comicground.activities;
 
-import static com.example.comicground.api.ClienteAPI.retrofit;
 import static com.example.comicground.api.ClienteAPI.usuarioEndpoints;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.comicground.R;
-import com.example.comicground.api.endpoints.UsuarioEndpoints;
 import com.example.comicground.utils.AESEncriptacion;
 import com.example.comicground.models.Usuario;
 import com.example.comicground.utils.Constantes;
@@ -22,6 +21,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.Objects;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -54,7 +54,7 @@ public class ActivityRegistro extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
         //Ocultar barra superior
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         //Asignar vistas a los objetos y algunas características
         encontrarVistasPorId();
     }
@@ -62,6 +62,7 @@ public class ActivityRegistro extends AppCompatActivity implements View.OnClickL
     /*
      * OnClickListener de Activity
      */
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
@@ -130,10 +131,7 @@ public class ActivityRegistro extends AppCompatActivity implements View.OnClickL
     }
 
     private boolean comprobarCorreo() {
-        if(!comprobarFormatoCorreo(correo, true)) {
-            return false;
-        }
-        return true;
+        return comprobarFormatoCorreo(correo, true);
     }
 
     private boolean comprobarConfirmacionCorreo() {
@@ -214,6 +212,7 @@ public class ActivityRegistro extends AppCompatActivity implements View.OnClickL
      * Tarea asíncrona para el registro
      */
 
+    @SuppressLint("StaticFieldLeak")
     private class Registrar extends AsyncTask<Void, Void, Integer> {
 
         @Override
@@ -317,12 +316,12 @@ public class ActivityRegistro extends AppCompatActivity implements View.OnClickL
 
     private void camposAVariables() {
         //Pasar los textos de los inputText a variables para mayor facilidad a la hora de manejar los datos
-        nombre=etNombre.getEditText().getText().toString();
-        apellidos=etApellidos.getEditText().getText().toString();
-        correo=etCorreo.getEditText().getText().toString();
-        confirmarCorreo=etConfirmarCorreo.getEditText().getText().toString();
-        nombreDeUsuario=etNombreDeUsuario.getEditText().getText().toString();
-        contrasena=etContrasena.getEditText().getText().toString();
+        nombre= Objects.requireNonNull(etNombre.getEditText()).getText().toString();
+        apellidos= Objects.requireNonNull(etApellidos.getEditText()).getText().toString();
+        correo= Objects.requireNonNull(etCorreo.getEditText()).getText().toString();
+        confirmarCorreo= Objects.requireNonNull(etConfirmarCorreo.getEditText()).getText().toString();
+        nombreDeUsuario= Objects.requireNonNull(etNombreDeUsuario.getEditText()).getText().toString();
+        contrasena= Objects.requireNonNull(etContrasena.getEditText()).getText().toString();
     }
 
     private void encontrarVistasPorId() {

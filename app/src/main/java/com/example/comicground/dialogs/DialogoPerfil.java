@@ -2,9 +2,11 @@ package com.example.comicground.dialogs;
 
 import static com.example.comicground.api.ClienteAPI.usuarioEndpoints;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatButton;
 
+import com.example.comicground.activities.ActivityInicio;
 import com.google.android.material.textfield.TextInputLayout;
 
 import com.example.comicground.utils.Constantes;
@@ -22,6 +25,7 @@ import com.example.comicground.models.Usuario;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -74,19 +78,13 @@ public class DialogoPerfil {
         dialogoPerfil=builder.create();
 
         //Asignar onClickListener a ambos botones
-        btnActualizar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //actualizar
-                new ActualizarUsuario().execute();
-            }
+        btnActualizar.setOnClickListener(view1 -> {
+            //actualizar
+            new ActualizarUsuario().execute();
         });
-        btnAtras.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Salir del diálogo
-                dialogoPerfil.dismiss();
-            }
+        btnAtras.setOnClickListener(view12 -> {
+            //Salir del diálogo
+            dialogoPerfil.dismiss();
         });
 
         return dialogoPerfil;
@@ -95,6 +93,7 @@ public class DialogoPerfil {
     /*
      * Tarea asíncrona para actualizar usuario
      */
+    @SuppressLint("StaticFieldLeak")
     public class ActualizarUsuario extends AsyncTask<Void, Void, Integer> {
         @Override
         protected void onPreExecute() {
@@ -124,6 +123,8 @@ public class DialogoPerfil {
                     respuesta=Constantes.ERROR_NO_MODIFICADO;
                 } else if(response.code()==HttpURLConnection.HTTP_NOT_ACCEPTABLE) {
                     respuesta=Constantes.ERROR_NOMBRE_DE_USUARIO_EXISTENTE;
+                } else if(response.code()==HttpURLConnection.HTTP_UNAUTHORIZED) {
+                    respuesta=Constantes.ERROR_CREDENCIALES;
                 } else {
                     respuesta=Constantes.ERROR_GENERICO;
                 }
@@ -149,6 +150,10 @@ public class DialogoPerfil {
                     break;
                 case Constantes.ERROR_NOMBRE_DE_USUARIO_EXISTENTE:
                     etNombreDeUsuario.setError(contexto.getResources().getString(R.string.usernameExists));
+                    break;
+                case Constantes.ERROR_CREDENCIALES:
+                    //Ha caducado el token, obligar a salir
+                    tokenCaducado();
                     break;
                 case Constantes.ERROR_NO_MODIFICADO:
                     crearToast(contexto.getResources().getString(R.string.notModified));
@@ -191,17 +196,17 @@ public class DialogoPerfil {
 
     //Asignar los textos
     public void asignarTextos(Usuario usuario) {
-        etNombre.getEditText().setText(usuario.getNombre());
-        etApellidos.getEditText().setText(usuario.getApellidos());
-        etNombreDeUsuario.getEditText().setText(usuario.getNombreDeUsuario());
-        etCorreo.getEditText().setText(usuario.getCorreo());
+        Objects.requireNonNull(etNombre.getEditText()).setText(usuario.getNombre());
+        Objects.requireNonNull(etApellidos.getEditText()).setText(usuario.getApellidos());
+        Objects.requireNonNull(etNombreDeUsuario.getEditText()).setText(usuario.getNombreDeUsuario());
+        Objects.requireNonNull(etCorreo.getEditText()).setText(usuario.getCorreo());
     }
 
     //Asignar los datos de los EditText al usuario
     public void asignarDatosUsuarioNuevo(Usuario usuarioNuevo) {
-        usuarioNuevo.setNombre(etNombre.getEditText().getText().toString());
-        usuarioNuevo.setApellidos(etApellidos.getEditText().getText().toString());
-        usuarioNuevo.setNombreDeUsuario(etNombreDeUsuario.getEditText().getText().toString());
+        usuarioNuevo.setNombre(Objects.requireNonNull(etNombre.getEditText()).getText().toString());
+        usuarioNuevo.setApellidos(Objects.requireNonNull(etApellidos.getEditText()).getText().toString());
+        usuarioNuevo.setNombreDeUsuario(Objects.requireNonNull(etNombreDeUsuario.getEditText()).getText().toString());
     }
 
     //Actualizar nombre de usuario en preferencias compartidas
@@ -210,6 +215,18 @@ public class DialogoPerfil {
         SharedPreferences.Editor datosUsuario=contexto.getSharedPreferences(Constantes.PREFERENCIAS_COMPARTIDAS, Context.MODE_PRIVATE).edit();
         datosUsuario.putString(Constantes.NOMBRE_DE_USUARIO, usuario.getNombreDeUsuario());
         datosUsuario.apply();
+    }
+
+    //Si ha caducado el token
+    private void tokenCaducado() {
+        //Mostrar Toast largo para informar
+        Toast.makeText(contexto, contexto.getResources().getString(R.string.tokenExpired), Toast.LENGTH_LONG).show();
+        //Token caducado, obligar a iniciar sesión de nuevo
+        Intent irAInicio=new Intent(contexto, ActivityInicio.class);
+        irAInicio.putExtra(Constantes.CERRAR_SESION, true);
+        //Flags para borrar las Activities anteriores también
+        irAInicio.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        contexto.startActivity(irAInicio);
     }
 
     public void crearToast(String mensaje) {

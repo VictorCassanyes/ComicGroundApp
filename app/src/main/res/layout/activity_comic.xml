@@ -117,7 +117,8 @@
                     android:id="@+id/fragmentoComentarios"
                     android:name="com.example.comicground.fragments.FragmentComentarios"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    tools:ignore="FragmentTagUsage" />
             </LinearLayout>
 
             <com.getbase.floatingactionbutton.FloatingActionsMenu

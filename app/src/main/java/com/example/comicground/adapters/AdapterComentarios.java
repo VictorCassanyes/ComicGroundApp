@@ -1,5 +1,6 @@
 package com.example.comicground.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,8 @@ public class AdapterComentarios extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         LayoutInflater layoutInflater=LayoutInflater.from(contexto);
+
+        @SuppressLint({"ViewHolder", "InflateParams"})
         View elemento=layoutInflater.inflate(R.layout.element_adapter_comentarios, null, false);
         //Nombre del usuario que comentó
         TextView nombreDeUsuario=elemento.findViewById(R.id.tvNombreDeUsuario);

@@ -1,5 +1,6 @@
 package com.example.comicground.utils;
 
+import android.annotation.SuppressLint;
 import android.util.Base64;
 
 import java.nio.charset.StandardCharsets;
@@ -29,6 +30,7 @@ public class AESEncriptacion {
             SecretKey key=new SecretKeySpec(semilla,Constantes.TIPO_ALGORITMO);
 
             //Crear cifrador con el tipo de algoritmo e iniciarlo con el modo para cifrar
+            @SuppressLint("GetInstance")
             Cipher cifrador=Cipher.getInstance(Constantes.TIPO_ALGORITMO);
             cifrador.init(Cipher.ENCRYPT_MODE, key);
 

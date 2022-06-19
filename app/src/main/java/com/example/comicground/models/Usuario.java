@@ -1,7 +1,6 @@
 package com.example.comicground.models;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class Usuario implements Serializable {
 
@@ -42,10 +41,6 @@ public class Usuario implements Serializable {
         return correo;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
     public String getNombreDeUsuario() {
         return nombreDeUsuario;
     }
@@ -68,22 +63,6 @@ public class Usuario implements Serializable {
 
     public void setApellidos(String apellidos) {
         this.apellidos = apellidos;
-    }
-
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-
-    public boolean isHabilitado() {
-        return habilitado;
-    }
-
-    public void setHabilitado(boolean habilitado) {
-        this.habilitado = habilitado;
     }
 
 }

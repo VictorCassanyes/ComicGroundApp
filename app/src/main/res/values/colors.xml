@@ -4,7 +4,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    //Tema de colores
+    //Tema de colores creado desde la página de Material Design
     <color name="primaryColor">#ffa726</color>
     <color name="primaryLightColor">#ffd95b</color>
     <color name="primaryDarkColor">#c77800</color>

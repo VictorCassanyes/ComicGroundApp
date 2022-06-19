@@ -1,12 +1,12 @@
 package com.example.comicground.activities;
 
 import static com.example.comicground.api.ClienteAPI.oAuthEndpoints;
-import static com.example.comicground.api.ClienteAPI.retrofit;
 import static com.example.comicground.api.ClienteAPI.usuarioEndpoints;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,15 +15,12 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.comicground.R;
-import com.example.comicground.api.endpoints.OAuthEndpoints;
-import com.example.comicground.api.endpoints.UsuarioEndpoints;
-import com.example.comicground.api.requests.PeticionInicioSesion;
-import com.example.comicground.api.responses.OAuthToken;
+import com.example.comicground.models.PeticionInicioSesion;
+import com.example.comicground.models.OAuthToken;
 import com.example.comicground.models.Usuario;
 import com.example.comicground.utils.AESEncriptacion;
 import com.example.comicground.utils.Constantes;
@@ -31,6 +28,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -68,7 +66,7 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
         //Asignar Layout inicial
         setContentView(R.layout.layout_cargando);
         //Ocultar barra superior
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         //Obtener si la sesión ha sido cerrada de los extras del Intent
         sesionCerrada=getIntent().getBooleanExtra(Constantes.CERRAR_SESION, false);
         //Si la sesión ha sido cerrada
@@ -85,6 +83,7 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
     /*
      * OnClickListener de Activity
      */
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
@@ -153,6 +152,7 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
      * Tarea asíncrona para iniciar sesión
      */
 
+    @SuppressLint("StaticFieldLeak")
     private class IniciarSesion extends AsyncTask<Void, Void, Integer> {
 
         @Override
@@ -301,6 +301,7 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
     }
 
     //Tarea asíncrona para intentar mantener sesión iniciada
+    @SuppressLint("StaticFieldLeak")
     private class IntentarMantenerSesionIniciada extends AsyncTask<Void, Void, Integer> {
 
         @Override
@@ -308,8 +309,7 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
             //Crear objeto petición de inicio de sesión
             PeticionInicioSesion peticion=new PeticionInicioSesion(nombreDeUsuarioPrefComp, contrasenaPrefComp);
             //Llamada a API para intentar iniciar sesión
-            int respuesta=intentarIniciarSesion(token, peticion);
-            return respuesta;
+            return intentarIniciarSesion(token, peticion);
         }
 
         @Override
@@ -349,12 +349,7 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
         btnRegistro=findViewById(R.id.btnRegistro);
 
         //Asignar OnCheckedChanged al CheckBox
-        cbMantenerSesion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                mantenerSesion=checked;
-            }
-        });
+        cbMantenerSesion.setOnCheckedChangeListener((compoundButton, checked) -> mantenerSesion=checked);
 
         //Asignar el OnClickListener a los botones
         btnIniciarSesion.setOnClickListener(this);
@@ -370,15 +365,15 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
     }
 
     private void limpiarCampos() {
-        etNombreDeUsuario.getEditText().setText(Constantes.VACIO);
-        etContrasena.getEditText().setText(Constantes.VACIO);
+        Objects.requireNonNull(etNombreDeUsuario.getEditText()).setText(Constantes.VACIO);
+        Objects.requireNonNull(etContrasena.getEditText()).setText(Constantes.VACIO);
         limpiarErrores();
     }
 
     private void camposAVariables() {
         //Pasar los textos de los inputText a variables para mayor facilidad a la hora de manejar los datos
-        nombreDeUsuario=etNombreDeUsuario.getEditText().getText().toString();
-        contrasena=etContrasena.getEditText().getText().toString();
+        nombreDeUsuario=Objects.requireNonNull(etNombreDeUsuario.getEditText()).getText().toString();
+        contrasena=Objects.requireNonNull(etContrasena.getEditText()).getText().toString();
     }
 
     private String crearCredencialesCliente() {

@@ -1,6 +1,5 @@
 package com.example.comicground.models;
 
-import java.io.Serializable;
 import java.util.Date;
 
 public class Comentario {
@@ -50,11 +49,5 @@ public class Comentario {
         return texto;
     }
 
-    public void setTexto(String texto) {
-        this.texto = texto;
-    }
-
     public String getFechaCreacion() { return fechaCreacion; }
-
-    public void setFechaCreacion(String fechaCreacion) { this.fechaCreacion = fechaCreacion; }
 }

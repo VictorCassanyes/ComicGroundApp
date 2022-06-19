@@ -1,8 +1,5 @@
 package com.example.comicground.models;
 
-import java.io.Serializable;
-import java.util.Date;
-
 public class Valoracion {
 
     private Integer id;
@@ -45,10 +42,6 @@ public class Valoracion {
 
     public float getPuntuacion() {
         return puntuacion;
-    }
-
-    public void setPuntuacion(float puntuacion) {
-        this.puntuacion = puntuacion;
     }
 
 }

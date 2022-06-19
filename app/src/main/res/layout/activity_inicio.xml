@@ -100,12 +100,12 @@
                 app:layout_constraintBottom_toTopOf="@+id/btnIniciarSesion">
                 <TextView
                     android:id="@+id/tvMantenerSesion"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/stayLoggedIn"
                     android:textSize="14sp"
                     android:layout_weight="0.5"
-                    android:gravity="right"/>
+                    android:gravity="end"/>
                 <CheckBox
                     android:id="@+id/cbMantenerSesion"
                     android:layout_width="wrap_content"

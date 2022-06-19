@@ -1,8 +1,8 @@
 package com.example.comicground.activities;
 
 import static com.example.comicground.api.ClienteAPI.comicEndpoints;
-import static com.example.comicground.api.ClienteAPI.retrofit;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -34,6 +33,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -73,7 +73,7 @@ public class ActivityBuscar extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscar);
         //Ocultar barra superior
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         //Asignar vistas a los objetos y algunas características
         encontrarVistasPorId();
         //Obtener extras del Intent
@@ -85,6 +85,7 @@ public class ActivityBuscar extends AppCompatActivity implements View.OnClickLis
     /*
      * OnClickListener de Activity
      */
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -120,6 +121,7 @@ public class ActivityBuscar extends AppCompatActivity implements View.OnClickLis
     /*
      * Tarea asíncrona para buscar cómics
      */
+    @SuppressLint("StaticFieldLeak")
     private class BuscarComics extends AsyncTask<Void, Void, Integer> {
 
         @Override
@@ -146,7 +148,7 @@ public class ActivityBuscar extends AppCompatActivity implements View.OnClickLis
                 if(response.isSuccessful()) {
                     respuesta=Constantes.OK;
                     comics=(ArrayList<Comic>) response.body();
-                } else if(response.code()== HttpURLConnection.HTTP_UNAUTHORIZED) {
+                } else if(response.code()==HttpURLConnection.HTTP_UNAUTHORIZED) {
                     respuesta=Constantes.ERROR_CREDENCIALES;
                 } else if(response.code()==HttpURLConnection.HTTP_NOT_FOUND) {
                     respuesta=Constantes.ERROR_NO_ENCONTRADO;
@@ -183,6 +185,7 @@ public class ActivityBuscar extends AppCompatActivity implements View.OnClickLis
     /*
      * Tarea asíncrona obtener cómics recientes
      */
+    @SuppressLint("StaticFieldLeak")
     private class ObtenerComicsRecientes extends AsyncTask<Void, Void, Integer> {
 
         @Override
@@ -240,6 +243,7 @@ public class ActivityBuscar extends AppCompatActivity implements View.OnClickLis
     /*
      * Switch con acciones distintas según la respuesta
      */
+    @SuppressLint("SetTextI18n")
     private void switchRespuesta(int respuesta) {
         switch(respuesta) {
             case Constantes.OK:
@@ -254,9 +258,8 @@ public class ActivityBuscar extends AppCompatActivity implements View.OnClickLis
                 listaComics.setAdapter(adapterComics);
                 break;
             case Constantes.ERROR_CREDENCIALES:
-                //Refrescar token o salir de la app e informar al usuario ¿?
-                cambiarVisibilidad();
-                crearToast(getResources().getString(R.string.errorUser));
+                //A caducado el token, obligar a salir
+                tokenCaducado();
                 break;
             case Constantes.ERROR_NO_ENCONTRADO:
                 //Si no se ha encontrado ningún cómic
@@ -281,6 +284,7 @@ public class ActivityBuscar extends AppCompatActivity implements View.OnClickLis
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
     }
 
+    @SuppressLint("InflateParams")
     private void encontrarVistasPorId() {
         //Encontrar las vistas de la interfaz gráfica y pasarlas a sus objetos
         progressBar=findViewById(R.id.progressBar);
@@ -297,16 +301,13 @@ public class ActivityBuscar extends AppCompatActivity implements View.OnClickLis
 
         //Encontrar el ListView del fragmento y asignarle un OnItemClickListener
         listaComics=findViewById(R.id.listView_comics);
-        listaComics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Comic comic=(Comic) adapterComics.getItem(i-1);
-                Intent irAComic=new Intent(getApplicationContext(), ActivityComic.class);
-                irAComic.putExtra(Constantes.COMIC, comic);
-                irAComic.putExtra(Constantes.USUARIO, usuario);
-                irAComic.putExtra(Constantes.TOKEN, token);
-                startActivity(irAComic);
-            }
+        listaComics.setOnItemClickListener((adapterView, view, i, l) -> {
+            Comic comic=(Comic) adapterComics.getItem(i-1);
+            Intent irAComic=new Intent(getApplicationContext(), ActivityComic.class);
+            irAComic.putExtra(Constantes.COMIC, comic);
+            irAComic.putExtra(Constantes.USUARIO, usuario);
+            irAComic.putExtra(Constantes.TOKEN, token);
+            startActivity(irAComic);
         });
 
         //Asignar un layout al footer, este se añadirá cuando el usuario busque algo
@@ -349,6 +350,18 @@ public class ActivityBuscar extends AppCompatActivity implements View.OnClickLis
         fragmentComics.setVisibility(View.GONE);
         //Mostrar mensaje de que no se ha encontrado ningún cómic
         noHayComics.setVisibility(View.VISIBLE);
+    }
+
+    //Si ha caducado el token
+    private void tokenCaducado() {
+        //Mostrar Toast largo para informar
+        Toast.makeText(this, getResources().getString(R.string.tokenExpired), Toast.LENGTH_LONG).show();
+        //Token caducado, obligar a iniciar sesión de nuevo
+        Intent irAInicio=new Intent(getApplicationContext(), ActivityInicio.class);
+        irAInicio.putExtra(Constantes.CERRAR_SESION, true);
+        //Flags para borrar las Activities anteriores también
+        irAInicio.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(irAInicio);
     }
 
     //Override onBackPressed() y quitar el super(), así  el botón para ir hacia atrás del móvil no hará nada

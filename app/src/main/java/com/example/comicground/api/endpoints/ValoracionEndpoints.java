@@ -1,6 +1,5 @@
 package com.example.comicground.api.endpoints;
 
-import com.example.comicground.models.Comentario;
 import com.example.comicground.models.Valoracion;
 
 import java.util.List;

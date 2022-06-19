@@ -1,5 +1,6 @@
 package com.example.comicground.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,8 @@ public class AdapterComics extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         LayoutInflater layoutInflater=LayoutInflater.from(contexto);
+
+        @SuppressLint({"InflateParams", "ViewHolder"})
         View elemento=layoutInflater.inflate(R.layout.element_adapter_comics, null, false);
         ImageView portada;
         TextView titulo;

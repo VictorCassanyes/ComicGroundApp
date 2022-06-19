@@ -24,17 +24,8 @@ public class Comic implements Serializable {
         return titulo;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-
     public String getPortada() {
         return portada;
-    }
-
-    public void setPortada(String portada) {
-        this.portada = portada;
     }
 
 }

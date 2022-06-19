@@ -1,15 +1,13 @@
 package com.example.comicground.activities;
 
 import static com.example.comicground.api.ClienteAPI.comentarioEndpoints;
-import static com.example.comicground.api.ClienteAPI.retrofit;
 import static com.example.comicground.api.ClienteAPI.valoracionEndpoints;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -27,8 +25,6 @@ import android.widget.Toast;
 
 import com.example.comicground.R;
 import com.example.comicground.adapters.AdapterComentarios;
-import com.example.comicground.api.endpoints.ComentarioEndpoints;
-import com.example.comicground.api.endpoints.ValoracionEndpoints;
 import com.example.comicground.dialogs.DialogoPerfil;
 import com.example.comicground.dialogs.DialogoSalir;
 import com.example.comicground.models.Comentario;
@@ -45,6 +41,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -88,7 +85,7 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comic);
         //Ocultar barra superior
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         //Obtener información extra del Intent
         obtenerExtrasIntent();
         //Asignar vistas a los objetos y algunas características
@@ -100,6 +97,7 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
     /*
      * OnClickListener de Activity
      */
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
@@ -137,6 +135,7 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
     /*
      * Tarea asíncrona para obtener comentarios
      */
+    @SuppressLint("StaticFieldLeak")
     private class ObtenerComentarios extends AsyncTask<Void, Void, Integer> {
 
         @Override
@@ -157,9 +156,11 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
                     respuesta=Constantes.OK;
                     comentarios=(ArrayList<Comentario>) response.body();
                     //Ordenar de más nuevo a más viejo (improvisación dado que no he podido usar Date.util para las fechas)
-                    Collections.reverse(comentarios);
+                    if (comentarios!=null) Collections.reverse(comentarios);
                 } else if(response.code()== HttpURLConnection.HTTP_NOT_FOUND) {
                     respuesta=Constantes.ERROR_NO_ENCONTRADO;
+                } else if(response.code()==HttpURLConnection.HTTP_UNAUTHORIZED) {
+                    respuesta=Constantes.ERROR_CREDENCIALES;
                 } else {
                     respuesta=Constantes.ERROR_GENERICO;
                 }
@@ -182,6 +183,10 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
                 case Constantes.ERROR_NO_ENCONTRADO:
                    crearToast(getResources().getString(R.string.errorNotFoundComments));
                     break;
+                case Constantes.ERROR_CREDENCIALES:
+                    //Ha caducado el token, obligar a salir
+                    tokenCaducado();
+                    break;
                 case Constantes.ERROR_SERVIDOR:
                     crearToast(getResources().getString(R.string.errorServer));
                     break;
@@ -202,6 +207,7 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
     /*
      * Tarea asíncrona obtener las valoraciones
      */
+    @SuppressLint("StaticFieldLeak")
     private class ObtenerValoraciones extends AsyncTask<Void, Void, Integer> {
 
         @Override
@@ -223,6 +229,8 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
                     valoraciones=(ArrayList<Valoracion>) response.body();
                 } else if(response.code()== HttpURLConnection.HTTP_NOT_FOUND) {
                     respuesta=Constantes.ERROR_NO_ENCONTRADO;
+                } else if(response.code()==HttpURLConnection.HTTP_UNAUTHORIZED) {
+                    respuesta=Constantes.ERROR_CREDENCIALES;
                 } else {
                     respuesta=Constantes.ERROR_GENERICO;
                 }
@@ -232,6 +240,7 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
             return respuesta;
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         protected void onPostExecute(Integer respuesta) {
             super.onPostExecute(respuesta);
@@ -250,6 +259,10 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
                     //Mostrar cuantos usuarios han valorado y media de valoraciones en texto
                     DecimalFormat formatoDecimal=new DecimalFormat(Constantes.FORMATO_UN_DECIMAL);
                     tvMedia.setText(valoraciones.size()+Constantes.ESPACIO+getResources().getString(R.string.ratings)+Constantes.SALTO_LINEA+formatoDecimal.format(mediaValoraciones)+Constantes.ESPACIO+getResources().getString(R.string.stars));
+                    break;
+                case Constantes.ERROR_CREDENCIALES:
+                    //Ha caducado el token, obligar a salir
+                    tokenCaducado();
                     break;
                 case Constantes.ERROR_SERVIDOR:
                     noHayValoraciones();
@@ -276,6 +289,7 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
     /*
      * Tarea asíncrona para comentar
      */
+    @SuppressLint("StaticFieldLeak")
     private class Comentar extends AsyncTask<Void, Void, Integer> {
 
         @Override
@@ -296,6 +310,8 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
                 Response<ResponseBody> response=call.execute();
                 if (response.isSuccessful()) {
                     respuesta=Constantes.OK;
+                } else if(response.code()==HttpURLConnection.HTTP_UNAUTHORIZED) {
+                    respuesta=Constantes.ERROR_CREDENCIALES;
                 } else {
                     respuesta=Constantes.ERROR_GENERICO;
                 }
@@ -315,6 +331,10 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
                     etComentar.setText(Constantes.VACIO);
                     crearToast(getResources().getString(R.string.commentDone));
                     new ObtenerComentarios().execute();
+                    break;
+                case Constantes.ERROR_CREDENCIALES:
+                    //Ha caducado el token, obligar a salir
+                    tokenCaducado();
                     break;
                 case Constantes.ERROR_SERVIDOR:
                     crearToast(getResources().getString(R.string.errorServer));
@@ -336,6 +356,7 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
     /*
      * Tarea asíncrona para hacer valoración
      */
+    @SuppressLint("StaticFieldLeak")
     private class Valorar extends AsyncTask<Void, Void, Integer> {
 
         @Override
@@ -356,6 +377,8 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
                 Response<ResponseBody> response=call.execute();
                 if (response.isSuccessful()) {
                     respuesta=Constantes.OK;
+                } else if(response.code()==HttpURLConnection.HTTP_UNAUTHORIZED) {
+                    respuesta=Constantes.ERROR_CREDENCIALES;
                 } else {
                     respuesta=Constantes.ERROR_GENERICO;
                 }
@@ -375,6 +398,10 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
                     //Actualizar la media de valoraciones
                     new ObtenerValoraciones().execute();
                     break;
+                case Constantes.ERROR_CREDENCIALES:
+                    //Ha caducado el token, obligar a salir
+                    tokenCaducado();
+                break;
                 case Constantes.ERROR_SERVIDOR:
                     crearToast(getResources().getString(R.string.errorServer));
                     break;
@@ -397,6 +424,7 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
      * útiles
      */
 
+    @SuppressLint("InflateParams")
     private void encontrarVistasPorId() {
         progressBar=findViewById(R.id.progressBar);
         tvTitulo=findViewById(R.id.titulo);
@@ -434,12 +462,7 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
         btnPerfil.setOnClickListener(this);
 
         //Asignar OnRatingBarChangeListener al RatingBar
-        valoracionUsuario.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
-                new Valorar().execute();
-            }
-        });
+        valoracionUsuario.setOnRatingBarChangeListener((ratingBar, v, b) -> new Valorar().execute());
     }
 
     private void obtenerExtrasIntent() {
@@ -463,6 +486,18 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
         if(!usuario.getNombreDeUsuario().equals(nombreDeUsuarioPC)) {
             usuario.setNombreDeUsuario(nombreDeUsuarioPC);
         }
+    }
+
+    //Si ha caducado el token
+    private void tokenCaducado() {
+        //Mostrar Toast largo para informar
+        Toast.makeText(this, getResources().getString(R.string.tokenExpired), Toast.LENGTH_LONG).show();
+        //Token caducado, obligar a iniciar sesión de nuevo
+        Intent irAInicio=new Intent(getApplicationContext(), ActivityInicio.class);
+        irAInicio.putExtra(Constantes.CERRAR_SESION, true);
+        //Flags para borrar las Activities anteriores también
+        irAInicio.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(irAInicio);
     }
 
     private void crearToast(String mensaje) {
