@@ -41,12 +41,15 @@ public class AdapterComentarios extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         LayoutInflater layoutInflater=LayoutInflater.from(contexto);
         View elemento=layoutInflater.inflate(R.layout.element_adapter_comentarios, null, false);
+        //Nombre del usuario que comentó
         TextView nombreDeUsuario=elemento.findViewById(R.id.tvNombreDeUsuario);
         nombreDeUsuario.setText(comentarios.get(i).getUsuario().getNombreDeUsuario());
+        //El comentario realizado
         TextView texto=elemento.findViewById(R.id.tvTexto);
         texto.setText(comentarios.get(i).getTexto());
+        //Fecha en la que se publicó el comentario
         TextView fechaComentario=elemento.findViewById(R.id.tvFechaComentario);
-        fechaComentario.setText(comentarios.get(i).getFechaCreacion().toString());
+        fechaComentario.setText(comentarios.get(i).getFechaCreacion());
         return elemento;
     }
 }

@@ -1,10 +1,17 @@
 package com.example.comicground.activities;
 
+import static com.example.comicground.api.ClienteAPI.comentarioEndpoints;
 import static com.example.comicground.api.ClienteAPI.retrofit;
+import static com.example.comicground.api.ClienteAPI.valoracionEndpoints;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,11 +29,14 @@ import com.example.comicground.R;
 import com.example.comicground.adapters.AdapterComentarios;
 import com.example.comicground.api.endpoints.ComentarioEndpoints;
 import com.example.comicground.api.endpoints.ValoracionEndpoints;
+import com.example.comicground.dialogs.DialogoPerfil;
+import com.example.comicground.dialogs.DialogoSalir;
 import com.example.comicground.models.Comentario;
 import com.example.comicground.models.Comic;
 import com.example.comicground.models.Usuario;
 import com.example.comicground.models.Valoracion;
 import com.example.comicground.utils.Constantes;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -42,6 +53,7 @@ import retrofit2.Response;
 public class ActivityComic extends AppCompatActivity implements View.OnClickListener {
 
     //Vistas
+    ProgressBar progressBar;
     ListView listaComentarios;
     TextView tvTitulo;
     TextView tvMedia;
@@ -51,6 +63,8 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
     Button btnAtras;
     RatingBar valoracionMediaUsuarios;
     RatingBar valoracionUsuario;
+    FloatingActionButton btnSalir;
+    FloatingActionButton btnPerfil;
 
     //Variables de vistas
     String texto;
@@ -83,123 +97,60 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
         new ObtenerComentarios().execute();
     }
 
-
-
+    /*
+     * OnClickListener de Activity
+     */
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
             case R.id.btnEnviar:
+                //Obtener el texto a comentar
                 texto=etComentar.getText().toString();
-                if(texto.equals("")) {
-                    return;
+                //Si está vacío, no hacer nada
+                if(texto.equals(Constantes.VACIO)) {
+                    break;
                 }
+                //Ejecutar la tarea asíncrona para comentar
                 new Comentar().execute();
                 break;
             case R.id.btnAtras:
+                //Terminar esta Activity
                 finish();
+                break;
+            case R.id.btnSalir:
+                //Mostrar el diálogo para cerrar sesión
+                AlertDialog dialogoSalir=DialogoSalir.crearDialogoSalir(this);
+                dialogoSalir.show();
+                break;
+            case R.id.btnPerfil:
+                //Crear instancia de la clase DialogoPerfil
+                DialogoPerfil dialogoPerfil=new DialogoPerfil(this, usuario, token);
+                //Crear el diálogo de perfil
+                AlertDialog alertDialogoPerfil=dialogoPerfil.crearDialogoPerfil();
+                //Mostrar el diálogo
+                alertDialogoPerfil.show();
+                //Actualizar nombre de usuario si este ha sido modificado en el diálogo
+                obtenerNombreDeUsuarioDePreferenciasCompartidas();
         }
     }
 
-    private void encontrarVistasPorId() {
-        tvTitulo=findViewById(R.id.titulo);
-        tvMedia=findViewById(R.id.media);
-        ivPortada=findViewById(R.id.portada);
-        listaComentarios=findViewById(R.id.lista_comentarios);
-        valoracionMediaUsuarios=findViewById(R.id.valoracionMediaUsuarios);
-
-        //Asignar un Layout al footer de ListView y este al propio ListView
-        pieDeLista=((LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_lista_comentarios, null, false);
-        listaComentarios.addFooterView(pieDeLista);
-        //Para que aparezca la lista desde el principio
-        adapterComentarios=new AdapterComentarios(comentarios, getApplicationContext());
-        listaComentarios.setAdapter(adapterComentarios);
-
-        //Asignar vistas del pie de lista de comentarios
-        valoracionUsuario=pieDeLista.findViewById(R.id.valoracionUsuario);
-        btnEnviar=pieDeLista.findViewById(R.id.btnEnviar);
-        etComentar=pieDeLista.findViewById(R.id.etComentar);
-        btnAtras=pieDeLista.findViewById(R.id.btnAtras);
-
-        //Asignarle el título al TextView
-        tvTitulo.setText(comic.getTitulo());
-        //Picasso es una librería para pasar más fácilmente de una URL a un ImageView
-        Picasso.get().load(comic.getPortada()).into(ivPortada);
-
-        //Asignar OnClickListener a los botones
-        btnEnviar.setOnClickListener(this);
-        btnAtras.setOnClickListener(this);
-
-        //Asignar OnRatingBarChangeListener al RatingBar
-        valoracionUsuario.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
-                new Valorar().execute();
-            }
-        });
-    }
-
-    private void obtenerExtrasIntent() {
-        //Obtener los datos pasados por la Activity anterior
-        comic=(Comic) getIntent().getSerializableExtra("comic");
-        usuario=(Usuario) getIntent().getSerializableExtra("usuario");
-        token=getIntent().getStringExtra("token");
-    }
-
-    private class Comentar extends AsyncTask<Void, Void, Integer> {
-
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            int respuesta;
-
-            Comentario comentario=new Comentario(comic, usuario, texto);
-
-            ComentarioEndpoints comentarioEndpoints=retrofit.create(ComentarioEndpoints.class);
-            try {
-                Call<ResponseBody> call=comentarioEndpoints.guardarComentario(token, comentario);
-                Response<ResponseBody> response=call.execute();
-                if (response.isSuccessful()) {
-                    respuesta=Constantes.OK;
-                } else {
-                    respuesta=Constantes.ERROR_GENERICO;
-                }
-            } catch (IOException e) {
-                respuesta=Constantes.ERROR_SERVIDOR;
-            }
-            return respuesta;
-        }
-
-        @Override
-        protected void onPostExecute(Integer respuesta) {
-            super.onPostExecute(respuesta);
-            switch(respuesta) {
-                case Constantes.OK:
-                    etComentar.setText("");
-                    Toast.makeText(ActivityComic.this, "¡Comentario realizado!", Toast.LENGTH_SHORT).show();
-                    new ObtenerComentarios().execute();
-                    break;
-                case Constantes.ERROR_SERVIDOR:
-                    Toast.makeText(ActivityComic.this, "Error servidor", Toast.LENGTH_SHORT).show();
-                    break;
-                case Constantes.ERROR_GENERICO:
-                    Toast.makeText(ActivityComic.this, "Error genérico", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-            Toast.makeText(ActivityComic.this, "El proceso de comentar ha sido cancelado", Toast.LENGTH_SHORT).show();
-        }
-    }
-
+    /*
+     * Tarea asíncrona para obtener comentarios
+     */
     private class ObtenerComentarios extends AsyncTask<Void, Void, Integer> {
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //Mostrar barra cargando
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
         protected Integer doInBackground(Void... voids) {
             int respuesta;
-
-            ComentarioEndpoints comentarioEndpoints=retrofit.create(ComentarioEndpoints.class);
             try {
+                //Realizar llamada para obtener comentarios por id del cómic
                 Call<List<Comentario>> call=comentarioEndpoints.obtenerComentariosPorComic(token, comic.getId());
                 Response<List<Comentario>> response=call.execute();
                 if (response.isSuccessful()) {
@@ -221,31 +172,50 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
         @Override
         protected void onPostExecute(Integer respuesta) {
             super.onPostExecute(respuesta);
+            //Ocultar barra cargando
+            progressBar.setVisibility(View.GONE);
             switch (respuesta) {
                 case Constantes.OK:
                     adapterComentarios=new AdapterComentarios(comentarios, getApplicationContext());
                     listaComentarios.setAdapter(adapterComentarios);
                     break;
                 case Constantes.ERROR_NO_ENCONTRADO:
-                    Toast.makeText(ActivityComic.this, "Todavía no hay ningún comentario, ¡Sé el primero!", Toast.LENGTH_SHORT).show();
+                   crearToast(getResources().getString(R.string.errorNotFoundComments));
                     break;
                 case Constantes.ERROR_SERVIDOR:
-                    Toast.makeText(ActivityComic.this, "Error servidor", Toast.LENGTH_SHORT).show();
+                    crearToast(getResources().getString(R.string.errorServer));
                     break;
                 case Constantes.ERROR_GENERICO:
-                    Toast.makeText(ActivityComic.this, "Error genérico", Toast.LENGTH_SHORT).show();
+                    crearToast(getResources().getString(R.string.error));
             }
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            //Ocultar barra cargando
+            progressBar.setVisibility(View.GONE);
+            crearToast(getResources().getString(R.string.cancelled));
         }
     }
 
+    /*
+     * Tarea asíncrona obtener las valoraciones
+     */
     private class ObtenerValoraciones extends AsyncTask<Void, Void, Integer> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //Mostrar barra cargando
+            progressBar.setVisibility(View.VISIBLE);
+        }
 
         @Override
         protected Integer doInBackground(Void... voids) {
             int respuesta;
-
-            ValoracionEndpoints valoracionEndpoints=retrofit.create(ValoracionEndpoints.class);
             try {
+                //Realizar llamada para obtener valoraciones por id de cómic
                 Call<List<Valoracion>> call=valoracionEndpoints.obtenerValoracionesPorComic(token, comic.getId());
                 Response<List<Valoracion>> response=call.execute();
                 if (response.isSuccessful()) {
@@ -265,6 +235,8 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
         @Override
         protected void onPostExecute(Integer respuesta) {
             super.onPostExecute(respuesta);
+            //Ocultar barra cargando
+            progressBar.setVisibility(View.GONE);
             switch (respuesta) {
                 case Constantes.OK:
                     //Calcular la media de todas las valoraciones
@@ -275,7 +247,9 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
                     mediaValoraciones=totalValoracion/valoraciones.size();
                     //Asignar ese valor a la RatingBar
                     valoracionMediaUsuarios.setRating(mediaValoraciones);
-                    tvMedia.setText(valoraciones.size()+" "+getResources().getString(R.string.ratings)+"\n"+mediaValoraciones+" "+getResources().getString(R.string.stars));
+                    //Mostrar cuantos usuarios han valorado y media de valoraciones en texto
+                    DecimalFormat formatoDecimal=new DecimalFormat(Constantes.FORMATO_UN_DECIMAL);
+                    tvMedia.setText(valoraciones.size()+Constantes.ESPACIO+getResources().getString(R.string.ratings)+Constantes.SALTO_LINEA+formatoDecimal.format(mediaValoraciones)+Constantes.ESPACIO+getResources().getString(R.string.stars));
                     break;
                 case Constantes.ERROR_SERVIDOR:
                     noHayValoraciones();
@@ -289,18 +263,95 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
                     crearToast(getResources().getString(R.string.error));
             }
         }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            //Ocultar barra cargando
+            progressBar.setVisibility(View.GONE);
+            crearToast(getResources().getString(R.string.cancelled));
+        }
     }
 
-    private class Valorar extends AsyncTask<Void, Void, Integer> {
+    /*
+     * Tarea asíncrona para comentar
+     */
+    private class Comentar extends AsyncTask<Void, Void, Integer> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //Mostrar barra cargando
+            progressBar.setVisibility(View.VISIBLE);
+        }
 
         @Override
         protected Integer doInBackground(Void... voids) {
             int respuesta;
-
-            Valoracion valoracion=new Valoracion(comic, usuario, valoracionUsuario.getRating());
-
-            ValoracionEndpoints valoracionEndpoints=retrofit.create(ValoracionEndpoints.class);
+            //Crear objeto comentario
+            Comentario comentario=new Comentario(comic, usuario, texto);
             try {
+                //Realizar llamada para guardar comentario
+                Call<ResponseBody> call=comentarioEndpoints.guardarComentario(token, comentario);
+                Response<ResponseBody> response=call.execute();
+                if (response.isSuccessful()) {
+                    respuesta=Constantes.OK;
+                } else {
+                    respuesta=Constantes.ERROR_GENERICO;
+                }
+            } catch (IOException e) {
+                respuesta=Constantes.ERROR_SERVIDOR;
+            }
+            return respuesta;
+        }
+
+        @Override
+        protected void onPostExecute(Integer respuesta) {
+            super.onPostExecute(respuesta);
+            //Ocultar barra cargando
+            progressBar.setVisibility(View.GONE);
+            switch(respuesta) {
+                case Constantes.OK:
+                    etComentar.setText(Constantes.VACIO);
+                    crearToast(getResources().getString(R.string.commentDone));
+                    new ObtenerComentarios().execute();
+                    break;
+                case Constantes.ERROR_SERVIDOR:
+                    crearToast(getResources().getString(R.string.errorServer));
+                    break;
+                case Constantes.ERROR_GENERICO:
+                    crearToast(getResources().getString(R.string.error));
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            //Ocultar barra cargando
+            progressBar.setVisibility(View.GONE);
+            crearToast(getResources().getString(R.string.cancelled));
+        }
+    }
+
+    /*
+     * Tarea asíncrona para hacer valoración
+     */
+    private class Valorar extends AsyncTask<Void, Void, Integer> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //Mostrar barra cargando
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            int respuesta;
+            //Crear objeto valoración
+            Valoracion valoracion=new Valoracion(comic, usuario, valoracionUsuario.getRating());
+            try {
+                //Realizar llamada para guardar valoración
                 Call<ResponseBody> call=valoracionEndpoints.guardarValoracion(token, valoracion);
                 Response<ResponseBody> response=call.execute();
                 if (response.isSuccessful()) {
@@ -317,6 +368,8 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
         @Override
         protected void onPostExecute(Integer respuesta) {
             super.onPostExecute(respuesta);
+            //Ocultar barra cargando
+            progressBar.setVisibility(View.GONE);
             switch (respuesta) {
                 case Constantes.OK:
                     //Actualizar la media de valoraciones
@@ -329,6 +382,71 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
                     crearToast(getResources().getString(R.string.error));
             }
         }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            //Ocultar barra cargando
+            progressBar.setVisibility(View.GONE);
+            crearToast(getResources().getString(R.string.cancelled));
+        }
+    }
+
+
+    /*
+     * útiles
+     */
+
+    private void encontrarVistasPorId() {
+        progressBar=findViewById(R.id.progressBar);
+        tvTitulo=findViewById(R.id.titulo);
+        tvMedia=findViewById(R.id.media);
+        ivPortada=findViewById(R.id.portada);
+        listaComentarios=findViewById(R.id.lista_comentarios);
+        valoracionMediaUsuarios=findViewById(R.id.valoracionMediaUsuarios);
+
+        //Asignar botones flotantes
+        btnSalir=findViewById(R.id.btnSalir);
+        btnPerfil=findViewById(R.id.btnPerfil);
+
+        //Asignar un Layout al footer de ListView y este al propio ListView
+        pieDeLista=((LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_lista_comentarios, null, false);
+        listaComentarios.addFooterView(pieDeLista);
+        //Para que aparezca la lista desde el principio
+        adapterComentarios=new AdapterComentarios(comentarios, getApplicationContext());
+        listaComentarios.setAdapter(adapterComentarios);
+
+        //Asignar vistas del pie de lista de comentarios
+        valoracionUsuario=pieDeLista.findViewById(R.id.valoracionUsuario);
+        btnEnviar=pieDeLista.findViewById(R.id.btnEnviar);
+        etComentar=pieDeLista.findViewById(R.id.etComentar);
+        btnAtras=pieDeLista.findViewById(R.id.btnAtras);
+
+        //Asignarle el título al TextView
+        tvTitulo.setText(comic.getTitulo());
+        //Asignar imagen al ImageView con la librería Picasso, sirve para pasar más fácilmente una URL a un ImageView
+        Picasso.get().load(comic.getPortada()).into(ivPortada);
+
+        //Asignar OnClickListener a los botones
+        btnEnviar.setOnClickListener(this);
+        btnAtras.setOnClickListener(this);
+        btnSalir.setOnClickListener(this);
+        btnPerfil.setOnClickListener(this);
+
+        //Asignar OnRatingBarChangeListener al RatingBar
+        valoracionUsuario.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                new Valorar().execute();
+            }
+        });
+    }
+
+    private void obtenerExtrasIntent() {
+        //Obtener los datos pasados por la Activity anterior
+        comic=(Comic) getIntent().getSerializableExtra(Constantes.COMIC);
+        usuario=(Usuario) getIntent().getSerializableExtra(Constantes.USUARIO);
+        token=getIntent().getStringExtra(Constantes.TOKEN);
     }
 
     private void noHayValoraciones() {
@@ -336,6 +454,15 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
         mediaValoraciones=0;
         valoracionMediaUsuarios.setRating(mediaValoraciones);
         tvMedia.setText(getResources().getString(R.string.noRatings));
+    }
+
+    private void obtenerNombreDeUsuarioDePreferenciasCompartidas() {
+        //Obtener las preferencias compartidas, solo la variable nombre_de_usuario
+        SharedPreferences datosUsuario=getSharedPreferences(Constantes.PREFERENCIAS_COMPARTIDAS, Context.MODE_PRIVATE);
+        String nombreDeUsuarioPC=datosUsuario.getString(Constantes.NOMBRE_DE_USUARIO, usuario.getNombreDeUsuario());
+        if(!usuario.getNombreDeUsuario().equals(nombreDeUsuarioPC)) {
+            usuario.setNombreDeUsuario(nombreDeUsuarioPC);
+        }
     }
 
     private void crearToast(String mensaje) {

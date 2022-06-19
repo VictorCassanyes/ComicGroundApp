@@ -54,6 +54,7 @@
                 <ImageView
                     style="@style/logo"
                     android:id="@+id/logo"
+                    android:contentDescription="@string/descr"
                     android:layout_marginStart="10dp"
                     android:scaleType="fitStart"
                     android:layout_weight="1"
@@ -88,6 +89,7 @@
                 style="@style/search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/descr"
                 app:layout_constraintTop_toBottomOf="@+id/line"
                 app:layout_constraintStart_toEndOf="@+id/etBuscar"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -127,38 +129,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="21dp"
-                android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:fab_expandDirection="up"
-                app:fab_addButtonPlusIconColor="@color/primaryDarkColor"
-                app:fab_addButtonColorNormal="@color/primaryColor"
-                app:fab_addButtonColorPressed="@color/primaryLightColor">
+                style="@style/floatingMenu">
 
                 <com.getbase.floatingactionbutton.FloatingActionButton
                     android:id="@+id/btnPerfil"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:fab_icon="@drawable/profile_dark"
-                    app:fab_colorNormal="@color/primaryColor"
-                    app:fab_colorPressed="@color/primaryLightColor"/>
-
-                <com.getbase.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/btnConfiguracion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:fab_icon="@drawable/settings_dark"
-                    app:fab_colorNormal="@color/primaryColor"
-                    app:fab_colorPressed="@color/primaryLightColor"/>
+                    style="@style/profileFloatingButton"/>
 
                 <com.getbase.floatingactionbutton.FloatingActionButton
                     android:id="@+id/btnSalir"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:fab_icon="@drawable/exit_dark"
-                    app:fab_colorNormal="@color/primaryColor"
-                    app:fab_colorPressed="@color/primaryLightColor"/>
+                    style="@style/exitFloatingButton"/>
             </com.getbase.floatingactionbutton.FloatingActionsMenu>
 </androidx.constraintlayout.widget.ConstraintLayout>

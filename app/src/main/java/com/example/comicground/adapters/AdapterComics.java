@@ -55,8 +55,9 @@ public class AdapterComics extends BaseAdapter {
             portada=elemento.findViewById(R.id.portada2);
             titulo=elemento.findViewById(R.id.titulo2);
         }
-        //Picasso es una librería para pasar más fácilmente de una URL a un ImageView
+        //Portada del cómic, utilizo la librería Picasso, sirve para pasar más fácilmente de una URL a un ImageView
         Picasso.get().load(comics.get(i).getPortada()).into(portada);
+        //Título del cómic
         titulo.setText(comics.get(i).getTitulo());
         return elemento;
     }

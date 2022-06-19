@@ -32,6 +32,26 @@
         <item name="android:textColor">@color/primaryColor</item>
     </style>
 
+    <!-- Botones flotantes -->
+    <style name="floatingMenu" parent="Theme.ComicGround">
+        <item name="fab_expandDirection">up</item>
+        <item name="fab_addButtonPlusIconColor">@color/primaryDarkColor</item>
+        <item name="fab_addButtonColorNormal">@color/primaryColor</item>
+        <item name="fab_addButtonColorPressed">@color/primaryLightColor</item>
+    </style>
+
+    <style name="exitFloatingButton">
+        <item name="fab_icon">@drawable/exit</item>
+        <item name="fab_colorNormal">@color/primaryColor</item>
+        <item name="fab_colorPressed">@color/primaryLightColor</item>
+    </style>
+
+    <style name="profileFloatingButton">
+        <item name="fab_icon">@drawable/profile</item>
+        <item name="fab_colorNormal">@color/primaryColor</item>
+        <item name="fab_colorPressed">@color/primaryLightColor</item>
+    </style>
+
     <!-- Textos -->
     <style name="textos" parent="Theme.ComicGround">
         <item name="android:textColor">@color/primaryColor</item>

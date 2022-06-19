@@ -18,7 +18,8 @@
             <ImageView
                 android:id="@+id/portada"
                 android:layout_width="400px"
-                android:layout_height="613px" />
+                android:layout_height="613px"
+                android:contentDescription="@string/descr"/>
 
             <TextView
                 android:id="@+id/titulo"
@@ -36,7 +37,8 @@
             <ImageView
                 android:id="@+id/portada2"
                 android:layout_width="400px"
-                android:layout_height="613px"  />
+                android:layout_height="613px"
+                android:contentDescription="@string/descr"/>
 
             <TextView
                 android:id="@+id/titulo2"

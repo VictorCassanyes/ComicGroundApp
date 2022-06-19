@@ -7,6 +7,16 @@
     android:orientation="vertical"
     tools:context=".activities.ActivityComic">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,11 +25,13 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/portada"
                 android:layout_marginTop="20dp"
                 android:layout_width="520px"
                 android:layout_height="796.9px"
+                android:contentDescription="@string/descr"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/titulo"
                 app:layout_constraintStart_toStartOf="parent"
@@ -106,6 +118,30 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
+
+            <com.getbase.floatingactionbutton.FloatingActionsMenu
+                android:id="@+id/menufloat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="21dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                style="@style/floatingMenu">
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnPerfil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/profileFloatingButton"/>
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnSalir"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/exitFloatingButton"/>
+            </com.getbase.floatingactionbutton.FloatingActionsMenu>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

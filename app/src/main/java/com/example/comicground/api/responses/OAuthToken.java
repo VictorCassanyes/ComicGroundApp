@@ -2,6 +2,9 @@ package com.example.comicground.api.responses;
 
 import com.google.gson.annotations.SerializedName;
 
+/*
+ * Respuesta específica a recibir cuando se pide un nuevo token a la API
+ */
 public class OAuthToken {
 
     @SerializedName("access_token")
@@ -9,9 +12,6 @@ public class OAuthToken {
 
     @SerializedName("token_type")
     private String tokenType;
-
-    @SerializedName("refresh_token")
-    private String refreshToken;
 
     @SerializedName("expires_in")
     private Long expiresIn;
@@ -34,14 +34,6 @@ public class OAuthToken {
 
     public void setTokenType(String tokenType) {
         this.tokenType = tokenType;
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
     }
 
     public Long getExpiresIn() {

@@ -1,6 +1,8 @@
 package com.example.comicground.activities;
 
+import static com.example.comicground.api.ClienteAPI.oAuthEndpoints;
 import static com.example.comicground.api.ClienteAPI.retrofit;
+import static com.example.comicground.api.ClienteAPI.usuarioEndpoints;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -52,7 +54,6 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
     String contrasenaPrefComp;
     Long expiresAt;
     String token;
-    String refresh_token;
     boolean mantenerSesion;
 
     //Datos de Intent
@@ -69,7 +70,7 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
         //Ocultar barra superior
         getSupportActionBar().hide();
         //Obtener si la sesión ha sido cerrada de los extras del Intent
-        sesionCerrada=getIntent().getBooleanExtra("sesionCerrada", false);
+        sesionCerrada=getIntent().getBooleanExtra(Constantes.CERRAR_SESION, false);
         //Si la sesión ha sido cerrada
         if(sesionCerrada) {
             //Asignar Layout, vistas a los objetos y algunas características
@@ -81,6 +82,9 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    /*
+     * OnClickListener de Activity
+     */
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
@@ -90,8 +94,6 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
                 //Actualizar las variables con los datos de los EditText
                 camposAVariables();
                 if(comprobarVariables()) {
-                    //Mostrar barra cargando
-                    progressBar.setVisibility(View.VISIBLE);
                     //Iniciar tarea asíncrona para iniciar sesión
                     new IniciarSesion().execute();
                 }
@@ -102,6 +104,11 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
                 limpiarCampos();
         }
     }
+
+
+    /*
+     * Comprobaciones
+     */
 
     private boolean comprobarVariables() {
         boolean validado=true;
@@ -116,124 +123,44 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
     }
 
     private boolean comprobarNombreDeUsuario() {
-        if(nombreDeUsuario.equals("")) {
-            etNombreDeUsuario.setError("Escriba su nombre de usuario");
+        if(nombreDeUsuario.equals(Constantes.VACIO)) {
+            etNombreDeUsuario.setError(getResources().getString(R.string.writeUsername));
             return false;
         }
         if(nombreDeUsuario.length()>20) {
-            etNombreDeUsuario.setError("El nombre de usuario no puede ser de más de 20 carácteres");
+            etNombreDeUsuario.setError(getResources().getString(R.string.usernameTooLong));
             return false;
         }
         return true;
     }
 
     private boolean comprobarContrasena() {
-        if(contrasena.equals("")) {
-            etContrasena.setError("Escriba su contraseña");
+        if(contrasena.equals(Constantes.VACIO)) {
+            etContrasena.setError(getResources().getString(R.string.writePass));
             return false;
         }
 
         if (contrasena.length()<8) {
-            etContrasena.setError("La contraseña debe tener un mínimo de 8 carácteres");
+            etContrasena.setError(getResources().getString(R.string.passwordTooShort));
             return false;
         }
 
         return true;
     }
 
-    private void limpiarErrores() {
-        etNombreDeUsuario.setError(null);
-        etContrasena.setError(null);
-    }
 
-    private void limpiarCampos() {
-        etNombreDeUsuario.getEditText().setText("");
-        etContrasena.getEditText().setText("");
-        limpiarErrores();
-    }
-
-    private void asignarLayoutYVistas() {
-        //Asignar el Layout
-        setContentView(R.layout.activity_inicio);
-        //Encontrar las vistas de la interfaz gráfica y pasarlas a sus objetos
-        progressBar=findViewById(R.id.progressBar);
-        cbMantenerSesion=findViewById(R.id.cbMantenerSesion);
-        etNombreDeUsuario=findViewById(R.id.etNombreDeUsuario);
-        etContrasena=findViewById(R.id.etContrasena);
-        btnIniciarSesion=findViewById(R.id.btnIniciarSesion);
-        btnRegistro=findViewById(R.id.btnRegistro);
-
-        //Asignar OnCheckedChanged al CheckBox
-        cbMantenerSesion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                mantenerSesion=checked;
-            }
-        });
-
-        //Asignar el OnClickListener a los botones
-        btnIniciarSesion.setOnClickListener(this);
-        btnRegistro.setOnClickListener(this);
-
-        //Para que no salga el icono de error en TextInput de la contraseña (ya que inhabilitaría el de mostrar/ocultar contraseña)
-        etContrasena.setErrorIconDrawable(null);
-    }
-
-    private void camposAVariables() {
-        //Pasar los textos de los inputText a variables para mayor facilidad a la hora de manejar los datos
-        nombreDeUsuario=etNombreDeUsuario.getEditText().getText().toString();
-        contrasena=etContrasena.getEditText().getText().toString();
-    }
-
-    //Pruebas OAuth2
-   /*
-   class ActualizarToken extends AsyncTask<String, Void,String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-            final MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-            String jsonStr="client_id=" + CLIENT_ID + "&refresh_token=" + Refreshtoken + "&grant_type=refresh_token";
-            OkHttpClient okHttpClient=new OkHttpClient();
-            Request peticion=new Request.Builder()
-                    .url("https://www.googleapis.com/oauth2/v4/token")
-                    .post(RequestBody.create(mediaType, jsonStr))
-                    .build();
-
-            try {
-                okhttp3.Response response=okHttpClient.newCall(peticion).execute();
-                assert response.body() != null;
-                //Data Received
-                return response.body().string();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            try {
-                JSONObject lJSONObject = new JSONObject(s);
-                String ReAccessToken = lJSONObject.getString("access_token");
-                String ReExpiresIn = lJSONObject.getString("expires_in");
-
-                Authcode = ReAccessToken;
-                Expiresin = Long.parseLong(ReExpiresIn);
-                ExpiryTime = System.currentTimeMillis() + (Expiresin * 1000);
-
-                saveData();
-
-                // Toast.makeText(ActivityInicio.this, "The new Expiry time is: " + ExpiryTime + " and System time is " + System.currentTimeMillis(), Toast.LENGTH_LONG).show();
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
+    /*
+     * Tarea asíncrona para iniciar sesión
+     */
 
     private class IniciarSesion extends AsyncTask<Void, Void, Integer> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //Mostrar barra cargando
+            progressBar.setVisibility(View.VISIBLE);
+        }
 
         @Override
         protected Integer doInBackground(Void... voids) {
@@ -269,7 +196,7 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
         protected void onPostExecute(Integer respuesta) {
             super.onPostExecute(respuesta);
             //Ocultar la barra de progreso
-            ocultarBarraDeProgreso();
+            progressBar.setVisibility(View.GONE);
             //Switch para accion segun respuesta
             switchRespuesta(respuesta);
         }
@@ -278,21 +205,18 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
         protected void onCancelled() {
             super.onCancelled();
             //Ocultar la barra de progreso
-            ocultarBarraDeProgreso();
+            progressBar.setVisibility(View.GONE);
 
             //Mostrar mensaje error
-            Toast.makeText(ActivityInicio.this, "Error al intentar iniciar sesión, el proceso ha sido cancelado", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ActivityInicio.this, getResources().getString(R.string.cancelled), Toast.LENGTH_SHORT).show();
         }
     }
 
+    //Método que realiza la llamada a la API para iniciar sesión
     private int intentarIniciarSesion(String token, PeticionInicioSesion peticion) {
         int respuesta;
-
-        //Crear objeto de endpoints necesario con retrofit
-        UsuarioEndpoints usuarioEndpoints=retrofit.create(UsuarioEndpoints.class);
-
-        //Realizar llamada al endpoint y mandar los datos necesarios al servidor
         try {
+            //Realizar llamada para inciar sesión
             Call<Usuario> call=usuarioEndpoints.iniciarSesion(token, peticion);
             Response<Usuario> response=call.execute();
             if(response.isSuccessful()) {
@@ -307,15 +231,13 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
         return respuesta;
     }
 
+    //Obtener el token
     private int obtenerOAuthToken(String nombreDeUsuario, String contrasenaEncriptada) {
         int respuesta;
         //Crear cabecera con credenciales del cliente (mi aplicación)
         String credencialesCliente=crearCredencialesCliente();
-        //Crear objeto de endpoints necesario con retrofit (solo cuenta con un endpoint)
-        OAuthEndpoints oAuthEndpoints=retrofit.create(OAuthEndpoints.class);
-
         try {
-            //Realizar llamada al endpoint y mandar las credenciales de cliente y de usuario, junto al grant_type
+            //Realizar llamada para obtener token
             Call<OAuthToken> obtenerToken=oAuthEndpoints.getAccessToken(credencialesCliente, nombreDeUsuario, contrasenaEncriptada, Constantes.GRANT_TYPE);
             Response<OAuthToken> response=obtenerToken.execute();
             if(response.isSuccessful()) {
@@ -323,7 +245,7 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
                 //Cambiar expires_in por expires_at, fecha en la que expira (en milisegundos)
                 Long expiresAt=new Date().getTime()+(response.body().getExpiresIn()*1000);
                 //Guardar Token y credenciales del usuario
-                guardarDatos(response.body().getAccessToken(), response.body().getRefreshToken(), expiresAt, nombreDeUsuario, contrasenaEncriptada);
+                guardarDatos(response.body().getAccessToken(), expiresAt, nombreDeUsuario, contrasenaEncriptada);
                 //Actualizar las variables con los nuevos datos de preferencias compartidas
                 obtenerDatos();
             } else {
@@ -335,6 +257,7 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
         return respuesta;
     }
 
+    //Switch con distintas acciones según la respuesta
     private void switchRespuesta(int respuesta) {
         switch(respuesta) {
             case Constantes.OK:
@@ -345,78 +268,46 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
                 break;
             case Constantes.ERROR_CREDENCIALES:
                 //El usuario no existe o la contraseña es incorrecta
-                etNombreDeUsuario.setError(" ");
-                etContrasena.setError("\nEl nombre de usuario o la contraseña no son correctos");
+                etNombreDeUsuario.setError(Constantes.ESPACIO);
+                etContrasena.setError(Constantes.SALTO_LINEA+getResources().getString(R.string.errorUser));
                 break;
             case Constantes.ERROR_SERVIDOR:
-                Toast.makeText(getApplicationContext(), "Error al conectar con el servidor", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.errorServer), Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void guardarDatos(String token, String refreshToken, Long expiresAt, String nombreDeUsuario, String contrasenaEncriptada){
-        //Guardar token y credenciales del usuario en las preferencias compartidas
-        SharedPreferences datosUsuario=getApplicationContext().getSharedPreferences(Constantes.PREFERENCIAS_COMPARTIDAS, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=datosUsuario.edit();
-        editor.putString("access_token",Constantes.TIPO_TOKEN+token);
-        editor.putString("refresh_token", refreshToken);
-        editor.putLong("expires_at", expiresAt);
-        editor.putString("nombre_de_usuario", nombreDeUsuario);
-        editor.putString("contraseña", contrasenaEncriptada);
-        editor.apply();
-    }
 
-    private void obtenerDatos() {
-        //Obtener los datos de las preferencias compartidas
-        SharedPreferences datosUsuario=getSharedPreferences(Constantes.PREFERENCIAS_COMPARTIDAS, Context.MODE_PRIVATE);
-        nombreDeUsuarioPrefComp=datosUsuario.getString("nombre_de_usuario", "");
-        contrasenaPrefComp=datosUsuario.getString("contraseña", "");
-        expiresAt=datosUsuario.getLong("expires_at", 0);
-        token=datosUsuario.getString("access_token", "");
-        refresh_token=datosUsuario.getString("refresh_token", "");
-    }
+    /*
+     * Método y tarea asíncrona para intentar mantener sesión iniciada
+     */
 
-    private void ocultarBarraDeProgreso() {
-        //Ocultar la barra de progreso
-        progressBar.setVisibility(View.GONE);
-    }
-
-    private String crearCredencialesCliente() {
-        //Base64.NO_WRAP sirve como indicador del codificador para omitir todos los terminadores de línea (Se hace así en Android)
-        return "Basic "+ Base64.encodeToString(Constantes.CREDENCIALES_APLICACION.getBytes(), Base64.NO_WRAP);
-    }
-
-    private void obtenerMantenerSesion() {
-        //Obtener las preferencias compartidas, solo la variable mantener_sesion_iniciada
-        SharedPreferences datosUsuario=getSharedPreferences(Constantes.PREFERENCIAS_COMPARTIDAS, Context.MODE_PRIVATE);
-        mantenerSesion=datosUsuario.getBoolean("mantener_sesion_iniciada", false);
-    }
-
-    private void guardarMantenerSesion() {
-        //Se actualizan las preferencias compartidas, solo la variable mantener_sesion_iniciada
-        SharedPreferences.Editor datosUsuario=getApplicationContext().getSharedPreferences(Constantes.PREFERENCIAS_COMPARTIDAS, Context.MODE_PRIVATE).edit();
-        datosUsuario.putBoolean("mantener_sesion_iniciada", mantenerSesion);
-        datosUsuario.apply();
-    }
-
+    //Método para intentar mantener sesión iniciada
     private void mantenerSesionIniciada() {
         //Obtener preferencias compartidas
         obtenerDatos();
         obtenerMantenerSesion();
         //Si no hay preferencias compartidas, o si no se quiere mantener la sesión iniciada o si el token ha expirado
-        if(nombreDeUsuarioPrefComp.equals("") || !mantenerSesion || (expiresAt-new Date().getTime())<0) {
+        if(nombreDeUsuarioPrefComp.equals(Constantes.VACIO) || !mantenerSesion) {
             //Asignar Layout, vistas a los objetos y algunas características
             asignarLayoutYVistas();
+            return;
+        } else if((expiresAt-new Date().getTime())<0) {
+            asignarLayoutYVistas();
+            Toast.makeText(this, getResources().getString(R.string.tokenExpired), Toast.LENGTH_LONG).show();
             return;
         }
         //Iniciar tarea asíncrona para iniciar la sesión
         new IntentarMantenerSesionIniciada().execute();
     }
 
+    //Tarea asíncrona para intentar mantener sesión iniciada
     private class IntentarMantenerSesionIniciada extends AsyncTask<Void, Void, Integer> {
 
         @Override
         protected Integer doInBackground(Void... voids) {
+            //Crear objeto petición de inicio de sesión
             PeticionInicioSesion peticion=new PeticionInicioSesion(nombreDeUsuarioPrefComp, contrasenaPrefComp);
+            //Llamada a API para intentar iniciar sesión
             int respuesta=intentarIniciarSesion(token, peticion);
             return respuesta;
         }
@@ -424,22 +315,119 @@ public class ActivityInicio extends AppCompatActivity implements View.OnClickLis
         @Override
         protected void onPostExecute(Integer respuesta) {
             super.onPostExecute(respuesta);
-            if(respuesta==Constantes.OK) {
-                //Ir a la siguiente Activity
-                crearIntent();
-                //Terminar esta Activity
-                finish();
-            } else {
-                //Asignar Layout, vistas a los objetos y algunas características
-                asignarLayoutYVistas();
+            switch(respuesta) {
+                case Constantes.OK:
+                    //Ir a la siguiente Activity
+                    crearIntent();
+                    //Terminar esta Activity
+                    finish();
+                    break;
+                case Constantes.ERROR_SERVIDOR:
+                    //Mensaje error servidor
+                    Toast.makeText(ActivityInicio.this, getResources().getString(R.string.errorServer), Toast.LENGTH_SHORT).show();
+                default:
+                    //Asignar Layout, vistas a los objetos y algunas características
+                    asignarLayoutYVistas();
             }
         }
     }
 
+
+    /*
+     * útiles
+     */
+
+    private void asignarLayoutYVistas() {
+        //Asignar el Layout
+        setContentView(R.layout.activity_inicio);
+        //Encontrar las vistas de la interfaz gráfica y pasarlas a sus objetos
+        progressBar=findViewById(R.id.progressBar);
+        cbMantenerSesion=findViewById(R.id.cbMantenerSesion);
+        etNombreDeUsuario=findViewById(R.id.etNombreDeUsuario);
+        etContrasena=findViewById(R.id.etContrasena);
+        btnIniciarSesion=findViewById(R.id.btnIniciarSesion);
+        btnRegistro=findViewById(R.id.btnRegistro);
+
+        //Asignar OnCheckedChanged al CheckBox
+        cbMantenerSesion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                mantenerSesion=checked;
+            }
+        });
+
+        //Asignar el OnClickListener a los botones
+        btnIniciarSesion.setOnClickListener(this);
+        btnRegistro.setOnClickListener(this);
+
+        //Para que no salga el icono de error en TextInput de la contraseña (ya que inhabilitaría el de mostrar/ocultar contraseña)
+        etContrasena.setErrorIconDrawable(null);
+    }
+
+    private void limpiarErrores() {
+        etNombreDeUsuario.setError(null);
+        etContrasena.setError(null);
+    }
+
+    private void limpiarCampos() {
+        etNombreDeUsuario.getEditText().setText(Constantes.VACIO);
+        etContrasena.getEditText().setText(Constantes.VACIO);
+        limpiarErrores();
+    }
+
+    private void camposAVariables() {
+        //Pasar los textos de los inputText a variables para mayor facilidad a la hora de manejar los datos
+        nombreDeUsuario=etNombreDeUsuario.getEditText().getText().toString();
+        contrasena=etContrasena.getEditText().getText().toString();
+    }
+
+    private String crearCredencialesCliente() {
+        //Base64.NO_WRAP sirve como indicador del codificador para omitir todos los terminadores de línea (Se hace así en Android)
+        return Constantes.TIPO_AUTH+Base64.encodeToString(Constantes.CREDENCIALES_APLICACION.getBytes(), Base64.NO_WRAP);
+    }
+
     private void crearIntent() {
         Intent irABuscar=new Intent(getApplicationContext(), ActivityBuscar.class);
-        irABuscar.putExtra("usuario", usuario);
-        irABuscar.putExtra("token", token);
+        irABuscar.putExtra(Constantes.USUARIO, usuario);
+        irABuscar.putExtra(Constantes.TOKEN, token);
         startActivity(irABuscar);
+    }
+
+
+    /*
+     * Útiles preferencias compartidas
+     */
+
+    private void guardarDatos(String token, Long expiresAt, String nombreDeUsuario, String contrasenaEncriptada){
+        //Guardar token y credenciales del usuario en las preferencias compartidas
+        SharedPreferences datosUsuario=getApplicationContext().getSharedPreferences(Constantes.PREFERENCIAS_COMPARTIDAS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=datosUsuario.edit();
+        editor.putString(Constantes.ACCESS_TOKEN,Constantes.TIPO_TOKEN+token);
+        editor.putLong(Constantes.EXPIRES_AT, expiresAt);
+        editor.putString(Constantes.NOMBRE_DE_USUARIO, nombreDeUsuario);
+        editor.putString(Constantes.CONTRASENA, contrasenaEncriptada);
+        editor.apply();
+    }
+
+    private void obtenerDatos() {
+        //Obtener los datos de las preferencias compartidas
+        SharedPreferences datosUsuario=getSharedPreferences(Constantes.PREFERENCIAS_COMPARTIDAS, Context.MODE_PRIVATE);
+        nombreDeUsuarioPrefComp=datosUsuario.getString(Constantes.NOMBRE_DE_USUARIO, Constantes.VACIO);
+        contrasenaPrefComp=datosUsuario.getString(Constantes.CONTRASENA, Constantes.VACIO);
+        expiresAt=datosUsuario.getLong(Constantes.EXPIRES_AT, 0);
+        token=datosUsuario.getString(Constantes.ACCESS_TOKEN, Constantes.VACIO);
+    }
+
+    private void obtenerMantenerSesion() {
+        //Obtener las preferencias compartidas, solo la variable mantener_sesion_iniciada
+        SharedPreferences datosUsuario=getSharedPreferences(Constantes.PREFERENCIAS_COMPARTIDAS, Context.MODE_PRIVATE);
+        mantenerSesion=datosUsuario.getBoolean(Constantes.MANTENER_SESION_INICIADA, false);
+    }
+
+    private void guardarMantenerSesion() {
+        //Se actualizan las preferencias compartidas, solo la variable mantener_sesion_iniciada
+        SharedPreferences.Editor datosUsuario=getApplicationContext().getSharedPreferences(Constantes.PREFERENCIAS_COMPARTIDAS, Context.MODE_PRIVATE).edit();
+        datosUsuario.putBoolean(Constantes.MANTENER_SESION_INICIADA, mantenerSesion);
+        datosUsuario.apply();
     }
  }

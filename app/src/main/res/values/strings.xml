@@ -1,37 +1,76 @@
 <resources>
+    <!-- Nombres -->
     <string name="app_name">ComicGround</string>
-    <string name="search">Buscar...</string>
-    <string name="user">Nombre de usuario</string>
-    <string name="pass">Contraseña</string>
-    <string name="signUp">Registrarse</string>
-    <string name="logIn">Iniciar sesión</string>
-    <string name="firstName">Nombre</string>
-    <string name="lastName">Apellidos</string>
-    <string name="email">Correo electrónico</string>
-    <string name="emailConfirm">Confirmar correo electrónico</string>
-    <string name="keepLoggedIn">¿Mantener sesión iniciada?</string>
-    <string name="send">Enviar</string>
-    <string name="comment">Comentar...</string>
-    <string name="back">Atrás</string>
+    <string name="author">By Víctor Cassanyes</string>
 
-    <string name="lastComics">- Cómics más recientes -</string>
-    <string name="foundComics">- Hemos encontrado</string>
-    <string name="comics">cómics con un nombre similar -</string>
-    <string name="noComics">Oops... no hemos podido encontrar nada</string>
-    <string name="noMoreComics">Lo siento... has llegado al final</string>
+    <!-- Textos vista registrar/iniciar sesión-->
+    <string name="user">Username</string>
+    <string name="pass">Password</string>
+    <string name="signUp">Sign up</string>
+    <string name="logIn">Log in</string>
+    <string name="firstName">Firstname</string>
+    <string name="lastName">Lastname</string>
+    <string name="email">Email</string>
+    <string name="emailConfirm">Confirm your email</string>
+    <string name="stayLoggedIn">Stay logged in?</string>
+    <string name="back">Back</string>
+    <string name="signedUp">Successfully signed up</string>
 
-    <string name="noRatings">No ha valorado nadie todavía, ¡sé el primero!</string>
-    <string name="ratings">valoracion/es</string>
-    <string name="stars">estrella/s</string>
-    <string name="rateAndComment">¡Valora y da tu opinión sobre este cómic!</string>
+    <!-- Textos vista buscar -->
+    <string name="search">Search...</string>
+    <string name="lastComics">- Latest comics -</string>
+    <string name="foundComics">- We found</string>
+    <string name="comics">comics with a similar name -</string>
+    <string name="noComics">Oops... we could not find anything</string>
+    <string name="noMoreComics">We are sorry... you have reached the end</string>
+    <string name="writeSearch">"Write something so we can look it up!</string>
 
-    <string name="error">Error inesperado</string>
-    <string name="errorServer">No se ha podido establecer conexión con el servidor</string>
-    <string name="errorUser">El usuario o contraseña son incorrectos</string>
-    <string name="errorNotFound">No se ha encontrado ningún resultado</string>
+    <!-- Textos vista cómic -->
+    <string name="comment">Comment...</string>
+    <string name="send">Send</string>
+    <string name="ratings">rating/s</string>
+    <string name="stars">stars</string>
+    <string name="rateAndComment">Rate and give your opinion on this comic!</string>
+    <string name="commentDone">Comment published!</string>
 
-    <!--Quizá no sean necesarios -->
-    <string name="profile">Tu perfil</string>
-    <string name="settings">Configuración</string>
-    <string name="exit">Salir</string>
+    <!-- Textos diálogo salir -->
+    <string name="dialogExitMessage">Are you sure you want to log out?</string>
+    <string name="dialogExitNegative">No</string>
+    <string name="dialogExitPositive">Yes</string>
+
+    <!-- Textos diálogo perfil -->
+    <string name="profile">Your profile</string>
+    <string name="update">Update</string>
+    <string name="notModified">Nothing has been changed</string>
+    <string name="modified">Your profile has been updated!</string>
+
+    <!-- Errores entrada datos -->
+    <string name="writePass">Write your password</string>
+    <string name="writeName">Write your firstname</string>
+    <string name="writeLastname">Write your lastname</string>
+    <string name="writeUsername">Write your username</string>
+    <string name="writeEmail">Write your email</string>
+    <string name="writeEmailConfirm">Confirmation does not match email</string>
+    <string name="usernameTooLong">The username cannot have more than 20 characters</string>
+    <string name="passwordTooShort">The password must have a minimum of 8 characters</string>
+    <string name="emailConfirmNotSameAsEmail">Confirmation email does not match email</string>
+    <string name="emailWrong">Invalid email format</string>
+    <string name="passNoMayus">The password must contain at least one uppercase letter</string>
+    <string name="passNoMinus">The password must contain at least one lowercase letter</string>
+    <string name="passNoNumber">The password must contain at least one number</string>
+
+    <!-- Errores al conectar con la API -->
+    <string name="tokenExpired">For security you must log in again</string>
+    <string name="error">An unexpected error has occurred</string>
+    <string name="errorServer">Failed to connect to server</string>
+    <string name="errorNotFound">No results found</string>
+    <string name="errorUser">The username or password is not correct</string>
+    <string name="usernameExists">That username is already in use</string>
+    <string name="emailExists">That email is already in use</string>
+    <string name="noRatings">No one has rated yet, be the first!</string>
+    <string name="errorNotFoundComments">There are no comments yet, be the first to comment!</string>
+    <string name="cancelled">Error, the process has been cancelled</string>
+
+    <!-- Descripción dummy para las imágenes -->
+    <string name="descr">descr</string>
 </resources>

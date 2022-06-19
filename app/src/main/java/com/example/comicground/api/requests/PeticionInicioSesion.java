@@ -1,5 +1,8 @@
 package com.example.comicground.api.requests;
 
+/*
+ * Petición específica a mandar al iniciar sesión
+ */
 public class PeticionInicioSesion {
 
     private String nombreDeUsuario;

@@ -15,9 +15,6 @@ import retrofit2.http.Path;
 
 public interface UsuarioEndpoints {
 
-    @GET("comicground/usuarios/{id}")
-    Call<Usuario> obtenerUsuario(@Header("Authorization") String token, @Path("id") Integer id);
-
     @POST("comicground/usuarios/inicioSesion")
     Call<Usuario> iniciarSesion(@Header("Authorization") String token, @Body PeticionInicioSesion peticionInicioSesion);
 

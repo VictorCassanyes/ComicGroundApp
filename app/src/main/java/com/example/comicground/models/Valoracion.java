@@ -3,7 +3,7 @@ package com.example.comicground.models;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Valoracion implements Serializable {
+public class Valoracion {
 
     private Integer id;
 
@@ -12,8 +12,6 @@ public class Valoracion implements Serializable {
     private Usuario usuario;
 
     private float puntuacion;
-
-    public Valoracion() {}
 
     public Valoracion(Comic comic, Usuario usuario, float puntuacion) {
         this.comic = comic;

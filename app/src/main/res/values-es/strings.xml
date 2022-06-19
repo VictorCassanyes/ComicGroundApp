@@ -1,0 +1,76 @@
+<resources>
+    <!-- Nombres -->
+    <string name="app_name">ComicGround</string>
+    <string name="author">By Víctor Cassanyes</string>
+
+    <!-- Textos vista registrar/iniciar sesión-->
+    <string name="user">Nombre de usuario</string>
+    <string name="pass">Contraseña</string>
+    <string name="signUp">Registrarse</string>
+    <string name="logIn">Iniciar sesión</string>
+    <string name="firstName">Nombre</string>
+    <string name="lastName">Apellidos</string>
+    <string name="email">Correo electrónico</string>
+    <string name="emailConfirm">Confirme su correo electrónico</string>
+    <string name="stayLoggedIn">¿Mantener sesión iniciada?</string>
+    <string name="back">Atrás</string>
+    <string name="signedUp">Se ha registrado correctamente</string>
+
+    <!-- Textos vista buscar -->
+    <string name="search">Buscar...</string>
+    <string name="lastComics">- Cómics más recientes -</string>
+    <string name="foundComics">- Hemos encontrado</string>
+    <string name="comics">cómics con un nombre similar -</string>
+    <string name="noComics">Oops... no hemos podido encontrar nada</string>
+    <string name="noMoreComics">Lo sentimos... has llegado al final</string>
+    <string name="writeSearch">"¡Escribe algo para que podamos buscarlo!</string>
+
+    <!-- Textos vista cómic -->
+    <string name="comment">Comentar...</string>
+    <string name="send">Enviar</string>
+    <string name="ratings">valoracion/es</string>
+    <string name="stars">estrellas</string>
+    <string name="rateAndComment">¡Valora y da tu opinión sobre este cómic!</string>
+    <string name="commentDone">¡Comentario publicado!</string>
+
+    <!-- Textos diálogo salir -->
+    <string name="dialogExitMessage">¿Seguro que quieres cerrar sesión?</string>
+    <string name="dialogExitNegative">No</string>
+    <string name="dialogExitPositive">Si</string>
+
+    <!-- Textos diálogo perfil -->
+    <string name="profile">Tu perfil</string>
+    <string name="update">Actualizar</string>
+    <string name="notModified">No se ha modificado nada</string>
+    <string name="modified">¡Tu perfil ha sido actualizado!</string>
+
+    <!-- Errores entrada datos -->
+    <string name="writePass">Escriba su contraseña</string>
+    <string name="writeName">Escriba su nombre</string>
+    <string name="writeLastname">Escriba sus apellidos</string>
+    <string name="writeUsername">Escriba su nombre de usuario</string>
+    <string name="writeEmail">Escriba su correo electrónico</string>
+    <string name="writeEmailConfirm">La confirmación no coincide con el correo electrónico</string>
+    <string name="usernameTooLong">El nombre de usuario no puede ser de más de 20 carácteres</string>
+    <string name="passwordTooShort">La contraseña debe tener un mínimo de 8 carácteres</string>
+    <string name="emailConfirmNotSameAsEmail">La confirmación no coincide con el correo electrónico</string>
+    <string name="emailWrong">Formato del correo no válido</string>
+    <string name="passNoMayus">La contraseña debe contener al menos una letra mayúscula</string>
+    <string name="passNoMinus">La contraseña debe contener al menos una letra minúscula</string>
+    <string name="passNoNumber">La contraseña debe contener al menos un número</string>
+
+    <!-- Errores al conectar con la API -->
+    <string name="tokenExpired">Por seguridad debe iniciar sesión de nuevo</string>
+    <string name="error">Ha ocurrido un error inesperado</string>
+    <string name="errorServer">No se ha podido establecer conexión con el servidor</string>
+    <string name="errorNotFound">No se ha encontrado ningún resultado</string>
+    <string name="errorUser">El usuario o la contraseña no son correctos</string>
+    <string name="usernameExists">Ese nombre de usuario ya está en uso</string>
+    <string name="emailExists">Ese correo electrónico ya está en uso</string>
+    <string name="noRatings">No ha valorado nadie todavía, ¡sé el primero!</string>
+    <string name="errorNotFoundComments">Todavía no hay ningún comentario, ¡Sé el primero en comentar!</string>
+    <string name="cancelled">Error, el proceso ha sido cancelado</string>
+
+    <!-- Descripción dummy para las imágenes -->
+    <string name="descr">descr</string>
+</resources>

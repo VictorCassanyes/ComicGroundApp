@@ -19,6 +19,8 @@ public class Usuario implements Serializable {
 
     private boolean habilitado;
 
+    public Usuario() {}
+
     public Usuario(String correo, String nombreDeUsuario, String nombre, String apellidos, String contrasena) {
         this.correo = correo;
         this.nombreDeUsuario = nombreDeUsuario;

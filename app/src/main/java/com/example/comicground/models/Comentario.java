@@ -3,7 +3,7 @@ package com.example.comicground.models;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Comentario implements Serializable {
+public class Comentario {
 
     private Integer id;
 
@@ -14,8 +14,6 @@ public class Comentario implements Serializable {
     private String texto;
 
     private String fechaCreacion;
-
-    public Comentario() {}
 
     public Comentario(Comic comic, Usuario usuario, String texto) {
         this.comic = comic;
