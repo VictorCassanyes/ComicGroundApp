@@ -50,7 +50,7 @@
     <string name="writeLastname">Write your lastname</string>
     <string name="writeUsername">Write your username</string>
     <string name="writeEmail">Write your email</string>
-    <string name="writeEmailConfirm">Confirmation does not match email</string>
+    <string name="writeEmailConfirm">Confirm your email</string>
     <string name="usernameTooLong">The username cannot have more than 20 characters</string>
     <string name="passwordTooShort">The password must have a minimum of 8 characters</string>
     <string name="emailConfirmNotSameAsEmail">Confirmation email does not match email</string>

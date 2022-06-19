@@ -81,7 +81,10 @@ public class DialogoPerfil {
         //Asignar onClickListener a ambos botones
         btnActualizar.setOnClickListener(view1 -> {
             //actualizar
-            new ActualizarUsuario().execute();
+            limpiarErrores();
+            if(comprobarCampos()) {
+                new ActualizarUsuario().execute();
+            }
         });
         btnAtras.setOnClickListener(view12 -> {
             //Salir del diálogo
@@ -89,6 +92,54 @@ public class DialogoPerfil {
         });
 
         return dialogoPerfil;
+    }
+
+
+    /*
+     * Comprobaciones
+     */
+
+    private boolean comprobarCampos() {
+        boolean validado=true;
+
+        if(!comprobarNombre()) {
+            validado=false;
+        }
+        if(!comprobarApellidos()) {
+            validado=false;
+        }
+        if(!comprobarNombreDeUsuario()) {
+            validado=false;
+        }
+        return validado;
+    }
+
+    private boolean comprobarNombre() {
+        if(Objects.requireNonNull(etNombre.getEditText()).getText().toString().equals(Constantes.VACIO)) {
+            etNombre.setError(contexto.getResources().getString(R.string.writeName));
+            return false;
+        }
+        return true;
+    }
+
+    private boolean comprobarApellidos() {
+        if(Objects.requireNonNull(etApellidos.getEditText()).getText().toString().equals(Constantes.VACIO)) {
+            etApellidos.setError(contexto.getResources().getString(R.string.writeLastname));
+            return false;
+        }
+        return true;
+    }
+
+    private boolean comprobarNombreDeUsuario() {
+        if(Objects.requireNonNull(etNombreDeUsuario.getEditText()).getText().toString().equals(Constantes.VACIO)) {
+            etNombreDeUsuario.setError(contexto.getResources().getString(R.string.writeUsername));
+            return false;
+        }
+        if(Objects.requireNonNull(etNombreDeUsuario.getEditText()).getText().toString().length()>20) {
+            etNombreDeUsuario.setError(contexto.getResources().getString(R.string.usernameTooLong));
+            return false;
+        }
+        return true;
     }
 
     /*
@@ -167,8 +218,6 @@ public class DialogoPerfil {
             super.onPreExecute();
             //Mostrar barra progreso
             progressBar.setVisibility(View.VISIBLE);
-            //Limpiar posible error en nombre de usuario
-            etNombreDeUsuario.setError(null);
         }
 
         @Override
@@ -294,6 +343,13 @@ public class DialogoPerfil {
         //Flags para borrar las Activities anteriores también
         irAInicio.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         contexto.startActivity(irAInicio);
+    }
+
+    private void limpiarErrores() {
+        //Limpiar posibles errores
+        etNombreDeUsuario.setError(null);
+        etNombre.setError(null);
+        etApellidos.setError(null);
     }
 
     public void crearToast(String mensaje) {

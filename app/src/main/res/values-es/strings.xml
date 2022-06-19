@@ -50,7 +50,7 @@
     <string name="writeLastname">Escriba sus apellidos</string>
     <string name="writeUsername">Escriba su nombre de usuario</string>
     <string name="writeEmail">Escriba su correo electrónico</string>
-    <string name="writeEmailConfirm">La confirmación no coincide con el correo electrónico</string>
+    <string name="writeEmailConfirm">Confirme su correo electrónico</string>
     <string name="usernameTooLong">El nombre de usuario no puede ser de más de 20 carácteres</string>
     <string name="passwordTooShort">La contraseña debe tener un mínimo de 8 carácteres</string>
     <string name="emailConfirmNotSameAsEmail">La confirmación no coincide con el correo electrónico</string>
