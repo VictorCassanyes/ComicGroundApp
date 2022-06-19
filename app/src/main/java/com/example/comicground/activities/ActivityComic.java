@@ -127,8 +127,6 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
                 AlertDialog alertDialogoPerfil=dialogoPerfil.crearDialogoPerfil();
                 //Mostrar el diálogo
                 alertDialogoPerfil.show();
-                //Actualizar nombre de usuario si este ha sido modificado en el diálogo
-                obtenerNombreDeUsuarioDePreferenciasCompartidas();
         }
     }
 
@@ -477,15 +475,6 @@ public class ActivityComic extends AppCompatActivity implements View.OnClickList
         mediaValoraciones=0;
         valoracionMediaUsuarios.setRating(mediaValoraciones);
         tvMedia.setText(getResources().getString(R.string.noRatings));
-    }
-
-    private void obtenerNombreDeUsuarioDePreferenciasCompartidas() {
-        //Obtener las preferencias compartidas, solo la variable nombre_de_usuario
-        SharedPreferences datosUsuario=getSharedPreferences(Constantes.PREFERENCIAS_COMPARTIDAS, Context.MODE_PRIVATE);
-        String nombreDeUsuarioPC=datosUsuario.getString(Constantes.NOMBRE_DE_USUARIO, usuario.getNombreDeUsuario());
-        if(!usuario.getNombreDeUsuario().equals(nombreDeUsuarioPC)) {
-            usuario.setNombreDeUsuario(nombreDeUsuarioPC);
-        }
     }
 
     //Si ha caducado el token

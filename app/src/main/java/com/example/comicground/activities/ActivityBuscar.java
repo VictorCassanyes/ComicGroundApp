@@ -105,16 +105,12 @@ public class ActivityBuscar extends AppCompatActivity implements View.OnClickLis
                 dialogoSalir.show();
                 break;
             case R.id.btnPerfil:
-                //Actualizar nombre de usuario si este ha sido modificado en ActivityComic
-                obtenerNombreDeUsuarioDePreferenciasCompartidas();
                 //Crear instancia de la clase DialogoPerfil
                 DialogoPerfil dialogoPerfil=new DialogoPerfil(this, usuario, token);
                 //Crear el diálogo de perfil
                 AlertDialog alertDialogoPerfil=dialogoPerfil.crearDialogoPerfil();
                 //Mostrar el diálogo
                 alertDialogoPerfil.show();
-                //Actualizar nombre de usuario si este ha sido modificado en el diálogo
-                obtenerNombreDeUsuarioDePreferenciasCompartidas();
         }
     }
 
@@ -333,15 +329,6 @@ public class ActivityBuscar extends AppCompatActivity implements View.OnClickLis
         if(token==null || token.equals(Constantes.VACIO)) {
             SharedPreferences datosUsuario=getSharedPreferences(Constantes.PREFERENCIAS_COMPARTIDAS, Context.MODE_PRIVATE);
             token=datosUsuario.getString(Constantes.ACCESS_TOKEN, Constantes.VACIO);
-        }
-    }
-
-    private void obtenerNombreDeUsuarioDePreferenciasCompartidas() {
-        //Obtener las preferencias compartidas, solo la variable nombre_de_usuario
-        SharedPreferences datosUsuario=getSharedPreferences(Constantes.PREFERENCIAS_COMPARTIDAS, Context.MODE_PRIVATE);
-        String nombreDeUsuarioPC=datosUsuario.getString(Constantes.NOMBRE_DE_USUARIO, usuario.getNombreDeUsuario());
-        if(!usuario.getNombreDeUsuario().equals(nombreDeUsuarioPC)) {
-            usuario.setNombreDeUsuario(nombreDeUsuarioPC);
         }
     }
 

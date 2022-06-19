@@ -71,8 +71,9 @@ public class DialogoPerfil {
         
         //Encontrar las vistas por id
         encontrarVistasPorId(view);
-        //Asignar textos a los EditText
-        asignarTextos(usuario);
+
+        //Obtener al usuario por id
+        new ObtenerUsuarioPorId().execute();
 
         //Crear el diálogo para poder hacer dismiss() aquí en uno de los onClickListener
         dialogoPerfil=builder.create();
@@ -88,6 +89,72 @@ public class DialogoPerfil {
         });
 
         return dialogoPerfil;
+    }
+
+    /*
+     * Tarea asíncrona para obtener el usuario por id
+     */
+    @SuppressLint("StaticFieldLeak")
+    public class ObtenerUsuarioPorId extends AsyncTask<Void, Void, Integer> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //Mostrar barra progreso
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            int respuesta;
+            try {
+                //Realizar llamada para actualizar usuario
+                Call<Usuario> call=usuarioEndpoints.obtenerUsuario(token, usuario.getId());
+                Response<Usuario> response=call.execute();
+                if (response.isSuccessful()) {
+                    respuesta=Constantes.OK;
+                    //Actualizar el usuario creado al iniciar sesión por el usuario obtenido
+                    usuario=response.body();
+                } else if(response.code()==HttpURLConnection.HTTP_UNAUTHORIZED) {
+                    respuesta=Constantes.ERROR_CREDENCIALES;
+                } else {
+                    respuesta=Constantes.ERROR_GENERICO;
+                }
+            } catch (IOException e) {
+                respuesta=Constantes.ERROR_SERVIDOR;
+            }
+            return respuesta;
+        }
+
+        @Override
+        protected void onPostExecute(Integer respuesta) {
+            super.onPostExecute(respuesta);
+            //Ocultar barra progreso
+            progressBar.setVisibility(View.GONE);
+            //Switch con distintas acciones según la respuesta
+            switch (respuesta) {
+                case Constantes.OK:
+                    //Asignar textos a los EditText
+                    asignarTextos(usuario);
+                    break;
+                case Constantes.ERROR_CREDENCIALES:
+                    //Ha caducado el token, obligar a salir
+                    tokenCaducado();
+                    break;
+                case Constantes.ERROR_SERVIDOR:
+                    crearToast(contexto.getResources().getString(R.string.errorServer));
+                    break;
+                case Constantes.ERROR_GENERICO:
+                    crearToast(contexto.getResources().getString(R.string.error));
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            //Ocultar barra progreso
+            progressBar.setVisibility(View.GONE);
+            crearToast(contexto.getResources().getString(R.string.cancelled));
+        }
     }
 
     /*
@@ -143,7 +210,7 @@ public class DialogoPerfil {
             switch (respuesta) {
                 case Constantes.OK:
                     crearToast(contexto.getResources().getString(R.string.modified));
-                    //Guardar nuevo nombre de usuario en las preferencias compartidas
+                    //Guardar el posible nuevo nombre de usuario en las preferencias compartidas
                     guardarNombreDeUsuario();
                     //Cerrar el diálogo
                     dialogoPerfil.dismiss();
