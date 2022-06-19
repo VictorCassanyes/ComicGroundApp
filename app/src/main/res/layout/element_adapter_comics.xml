@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -17,14 +18,15 @@
             android:layout_weight="1">
             <ImageView
                 android:id="@+id/portada"
-                android:layout_width="400px"
-                android:layout_height="613px"
+                android:layout_width="175dp"
+                android:layout_height="250dp"
                 android:contentDescription="@string/descr"/>
 
             <TextView
                 android:id="@+id/titulo"
-                android:layout_width="400px"
+                android:layout_width="175dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 style="@style/textos"
                 android:textSize="14sp"/>
         </LinearLayout>
@@ -36,14 +38,15 @@
             android:layout_weight="1">
             <ImageView
                 android:id="@+id/portada2"
-                android:layout_width="400px"
-                android:layout_height="613px"
+                android:layout_width="175dp"
+                android:layout_height="250dp"
                 android:contentDescription="@string/descr"/>
 
             <TextView
                 android:id="@+id/titulo2"
-                android:layout_width="400px"
+                android:layout_width="175dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 style="@style/textos"
                 android:textSize="14sp" />
         </LinearLayout>

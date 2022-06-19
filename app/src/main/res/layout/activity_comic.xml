@@ -29,8 +29,8 @@
             <ImageView
                 android:id="@+id/portada"
                 android:layout_marginTop="20dp"
-                android:layout_width="520px"
-                android:layout_height="796.9px"
+                android:layout_width="227.5dp"
+                android:layout_height="325dp"
                 android:contentDescription="@string/descr"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/titulo"
@@ -41,6 +41,7 @@
                 android:id="@+id/titulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 style="@style/textos"
                 android:textSize="20sp"
                 app:layout_constraintTop_toBottomOf="@+id/portada"

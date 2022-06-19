@@ -17,16 +17,16 @@
     <string name="signedUp">Successfully signed up</string>
 
     <!-- Textos vista buscar -->
-    <string name="search">Search...</string>
+    <string name="search">Search…</string>
     <string name="lastComics">- Latest comics -</string>
     <string name="foundComics">- We found</string>
     <string name="comics">comics with a similar name -</string>
-    <string name="noComics">Oops... we could not find anything</string>
-    <string name="noMoreComics">We are sorry... you have reached the end</string>
+    <string name="noComics">Oops… we could not find anything</string>
+    <string name="noMoreComics">We are sorry… you have reached the end</string>
     <string name="writeSearch">"Write something so we can look it up!</string>
 
     <!-- Textos vista cómic -->
-    <string name="comment">Comment...</string>
+    <string name="comment">Comment…</string>
     <string name="send">Send</string>
     <string name="ratings">rating/s</string>
     <string name="stars">stars</string>
